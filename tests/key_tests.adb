@@ -39,6 +39,8 @@ is
                  Key      => Privkey);
       Assert (Condition => Keys.Get_Modulus (Key => Privkey) = Ref_Modulus,
               Message   => "Modulus mismatch");
+      Assert (Condition => Keys.Get_Pub_Exponent (Key => Privkey) = "010001",
+              Message   => "Public exponent mismatch");
 
       begin
          Keys.Load (Filename => "data/key_invalid.der",

@@ -30,6 +30,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.Pub_Exp);
+   end Get_Pub_Exponent;
+
+   -------------------------------------------------------------------------
+
    procedure Load
      (Filename :     String;
       Key      : out RSA_Private_Key_Type)
@@ -101,6 +109,8 @@ is
 
          Key.Modulus := To_Unbounded_String
            (Utils.To_Hex_String (Num => Data.modulus));
+         Key.Pub_Exp := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.publicExponent));
 
          RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
            (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,
