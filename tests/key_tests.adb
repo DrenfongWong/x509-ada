@@ -48,6 +48,12 @@ is
      & "dc555cef315b677ffac98b0a512c9933356d74854dc20f17107b4d12d836eb435d7221"
      & "6b19";
 
+   Ref_Coefficient : constant String := "4440408c4ca3597067faedf8e603a3cca4c1a"
+     & "5c1b5469b25d860ae08f8844d5055b2ae935a966aff2d78fb9b5118731e012bb06ba43"
+     & "5209e6f2adfb040c183a2a0b24558b2b9f225b507e42f83a8e5c27afe65a621671f780"
+     & "ff48bf46b9041342dc6515ec7859a95eed1f3135db7bc6e5490faa44de6155917378f8"
+     & "eac8f8459";
+
    -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Testcase)
@@ -85,6 +91,9 @@ is
               Message   => "Exponent 1 mismatch");
       Assert (Condition => Keys.Get_Exponent2 (Key => Privkey) = Ref_Exp2,
               Message   => "Exponent 2 mismatch");
+      Assert (Condition => Keys.Get_Coefficient
+              (Key => Privkey) = Ref_Coefficient,
+              Message   => "Coefficient mismatch");
 
       begin
          Keys.Load (Filename => "data/key_invalid.der",

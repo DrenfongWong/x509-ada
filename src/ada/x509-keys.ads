@@ -28,17 +28,20 @@ is
    --  Return second prime q.
 
    function Get_Exponent1 (Key : RSA_Private_Key_Type) return String;
-   --  Return first exponent (d mod (p-1)).
+   --  Return first exponent, d mod (p-1).
 
    function Get_Exponent2 (Key : RSA_Private_Key_Type) return String;
-   --  Return second exponent (d mod (q-1)).
+   --  Return second exponent, d mod (q-1).
+
+   function Get_Coefficient (Key : RSA_Private_Key_Type) return String;
+   --  Return coefficient, (inverse of q) mod p.
 
    Load_Error : exception;
 
 private
 
    type RSA_Private_Key_Type is record
-      N, E, D, P, Q, Exp1, Exp2 : Ada.Strings.Unbounded.Unbounded_String;
+      N, E, D, P, Q, Exp1, Exp2, Coe : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end X509.Keys;
