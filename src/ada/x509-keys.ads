@@ -21,12 +21,18 @@ is
    function Get_Priv_Exponent (Key : RSA_Private_Key_Type) return String;
    --  Return private exponent.
 
+   function Get_Prime_P (Key : RSA_Private_Key_Type) return String;
+   --  Return first prime p.
+
+   function Get_Prime_Q (Key : RSA_Private_Key_Type) return String;
+   --  Return second prime q.
+
    Load_Error : exception;
 
 private
 
    type RSA_Private_Key_Type is record
-      Modulus, Pub_Exp, Priv_Exp : Ada.Strings.Unbounded.Unbounded_String;
+      N, E, D, P, Q : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end X509.Keys;

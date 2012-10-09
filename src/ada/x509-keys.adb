@@ -25,15 +25,31 @@ is
    function Get_Modulus (Key : RSA_Private_Key_Type) return String
    is
    begin
-      return To_String (Key.Modulus);
+      return To_String (Key.N);
    end Get_Modulus;
+
+   -------------------------------------------------------------------------
+
+   function Get_Prime_P (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.P);
+   end Get_Prime_P;
+
+   -------------------------------------------------------------------------
+
+   function Get_Prime_Q (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.Q);
+   end Get_Prime_Q;
 
    -------------------------------------------------------------------------
 
    function Get_Priv_Exponent (Key : RSA_Private_Key_Type) return String
    is
    begin
-      return To_String (Key.Priv_Exp);
+      return To_String (Key.D);
    end Get_Priv_Exponent;
 
    -------------------------------------------------------------------------
@@ -41,7 +57,7 @@ is
    function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String
    is
    begin
-      return To_String (Key.Pub_Exp);
+      return To_String (Key.E);
    end Get_Pub_Exponent;
 
    -------------------------------------------------------------------------
@@ -115,12 +131,16 @@ is
             end if;
          end Check_Constraints;
 
-         Key.Modulus  := To_Unbounded_String
-           (Utils.To_Hex_String (Num => Data.modulus));
-         Key.Pub_Exp  := To_Unbounded_String
-           (Utils.To_Hex_String (Num => Data.publicExponent));
-         Key.Priv_Exp := To_Unbounded_String
-           (Utils.To_Hex_String (Num => Data.privateExponent));
+         Key.N := To_Unbounded_String (Utils.To_Hex_String
+                                       (Num => Data.modulus));
+         Key.E := To_Unbounded_String (Utils.To_Hex_String
+                                       (Num => Data.publicExponent));
+         Key.D := To_Unbounded_String (Utils.To_Hex_String
+                                       (Num => Data.privateExponent));
+         Key.P := To_Unbounded_String (Utils.To_Hex_String
+                                       (Num => Data.prime1));
+         Key.Q := To_Unbounded_String (Utils.To_Hex_String
+                                       (Num => Data.prime2));
 
          RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
            (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,
