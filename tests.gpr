@@ -1,6 +1,5 @@
 with "ahven";
 with "common";
-with "src/ada/thin/binding";
 
 project Tests is
 
