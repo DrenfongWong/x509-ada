@@ -18,12 +18,15 @@ is
    function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String;
    --  Return public exponent.
 
+   function Get_Priv_Exponent (Key : RSA_Private_Key_Type) return String;
+   --  Return private exponent.
+
    Load_Error : exception;
 
 private
 
    type RSA_Private_Key_Type is record
-      Modulus, Pub_Exp : Ada.Strings.Unbounded.Unbounded_String;
+      Modulus, Pub_Exp, Priv_Exp : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end X509.Keys;

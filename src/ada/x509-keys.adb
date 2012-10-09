@@ -30,6 +30,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Priv_Exponent (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.Priv_Exp);
+   end Get_Priv_Exponent;
+
+   -------------------------------------------------------------------------
+
    function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String
    is
    begin
@@ -107,10 +115,12 @@ is
             end if;
          end Check_Constraints;
 
-         Key.Modulus := To_Unbounded_String
+         Key.Modulus  := To_Unbounded_String
            (Utils.To_Hex_String (Num => Data.modulus));
-         Key.Pub_Exp := To_Unbounded_String
+         Key.Pub_Exp  := To_Unbounded_String
            (Utils.To_Hex_String (Num => Data.publicExponent));
+         Key.Priv_Exp := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.privateExponent));
 
          RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
            (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,

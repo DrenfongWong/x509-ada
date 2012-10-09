@@ -15,6 +15,15 @@ is
      & "74c48ee32c65a1e32b27ae330dc4acd1b762c84ea48fb684d3476241e9ae7feb9e3898"
      & "1d85184ae949dfcb8064e6c333a096864ba6c420b0deb18e952fb";
 
+   Ref_Priv_Exp : constant String := "5877fd918fee9a9897189b1961dd2528ff8294e2"
+     & "f11feeb5a575b3f2f766979aae10094690ccd6c330e9b92ea473b818497433bc9bb9d1"
+     & "58bb946eff8c3e8c8eb4a2a5fa1626af6022896b3b78faea3e7e6ef7b54eaa8fba9eee"
+     & "9cb3977630c0013b742f492aa63c9f82be9be5243c5c7b0a42d1cdd37535a91e56eb75"
+     & "4f0cd4fdc52d015f22635c84b70fcaca2c8bfc8eda277cd9d6983ee6445224b283ad19"
+     & "5fd3143e23b018d765eb4a299b2eac66c95996abbe059bf60058682f8bf371d38660fc"
+     & "2e30a7803e8b316d37ccd68e4b58d5bad1ac29d17d411c7afbf984fa85c5f38f16607d"
+     & "c7b997ffc787e6fd93f9747db30a05f76c561f1439eed701e0d1";
+
    -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Testcase)
@@ -41,6 +50,9 @@ is
               Message   => "Modulus mismatch");
       Assert (Condition => Keys.Get_Pub_Exponent (Key => Privkey) = "010001",
               Message   => "Public exponent mismatch");
+      Assert (Condition => Keys.Get_Priv_Exponent
+              (Key => Privkey) = Ref_Priv_Exp,
+              Message   => "Private exponent mismatch");
 
       begin
          Keys.Load (Filename => "data/key_invalid.der",
