@@ -22,6 +22,22 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Exponent1 (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.Exp1);
+   end Get_Exponent1;
+
+   -------------------------------------------------------------------------
+
+   function Get_Exponent2 (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.Exp2);
+   end Get_Exponent2;
+
+   -------------------------------------------------------------------------
+
    function Get_Modulus (Key : RSA_Private_Key_Type) return String
    is
    begin
@@ -131,16 +147,20 @@ is
             end if;
          end Check_Constraints;
 
-         Key.N := To_Unbounded_String (Utils.To_Hex_String
-                                       (Num => Data.modulus));
-         Key.E := To_Unbounded_String (Utils.To_Hex_String
-                                       (Num => Data.publicExponent));
-         Key.D := To_Unbounded_String (Utils.To_Hex_String
-                                       (Num => Data.privateExponent));
-         Key.P := To_Unbounded_String (Utils.To_Hex_String
-                                       (Num => Data.prime1));
-         Key.Q := To_Unbounded_String (Utils.To_Hex_String
-                                       (Num => Data.prime2));
+         Key.N    := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.modulus));
+         Key.E    := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.publicExponent));
+         Key.D    := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.privateExponent));
+         Key.P    := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.prime1));
+         Key.Q    := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.prime2));
+         Key.Exp1 := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.exponent1));
+         Key.Exp2 := To_Unbounded_String
+           (Utils.To_Hex_String (Num => Data.exponent2));
 
          RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
            (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,

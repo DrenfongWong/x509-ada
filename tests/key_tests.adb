@@ -36,6 +36,18 @@ is
      & "c93de046c99ad239e370d1a379c1bd5576c98999c17ad19d2eebd29d561f764730e1ab"
      & "6d8525";
 
+   Ref_Exp1 : constant String := "0085a14c689128f1c8e6092203b6de4918e4ca51f8b0"
+     & "6394fc71b5859c36ad6797fdc9be204afcd8732b0e07e62e9f5ed47393f44c3470f795"
+     & "560f941aa760833709e5acdd5b071b090bd0653eb92f9bc4d86166d309dd14dc4b34c4"
+     & "2e7b0926bfa940c5577db213518ce1918564d4be5f6e82ff8f8cfe56645e4451a311aa"
+     & "bca5";
+
+   Ref_Exp2 : constant String := "00ba03b20d11127f9a9e1b579ad37571966ddd973271"
+     & "61285f4734e6df05ee3630c58a337e506d18f5073d6714b8500fa697ebe18f148a50bb"
+     & "9e50e996f6a78c19476bc0a41a075629891f3f8535bd7f799ef7b488f5aa21809b5e67"
+     & "dc555cef315b677ffac98b0a512c9933356d74854dc20f17107b4d12d836eb435d7221"
+     & "6b19";
+
    -------------------------------------------------------------------------
 
    procedure Initialize (T : in out Testcase)
@@ -69,6 +81,10 @@ is
               Message   => "Prime p mismatch");
       Assert (Condition => Keys.Get_Prime_Q (Key => Privkey) = Ref_Prime2,
               Message   => "Prime q mismatch");
+      Assert (Condition => Keys.Get_Exponent1 (Key => Privkey) = Ref_Exp1,
+              Message   => "Exponent 1 mismatch");
+      Assert (Condition => Keys.Get_Exponent2 (Key => Privkey) = Ref_Exp2,
+              Message   => "Exponent 2 mismatch");
 
       begin
          Keys.Load (Filename => "data/key_invalid.der",
