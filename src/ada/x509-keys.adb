@@ -86,6 +86,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Size (Key : RSA_Private_Key_Type) return Natural
+   is
+   begin
+      return Key.Size;
+   end Get_Size;
+
+   -------------------------------------------------------------------------
+
    procedure Load
      (Filename :     String;
       Key      : out RSA_Private_Key_Type)
@@ -107,6 +115,7 @@ is
       end;
 
       declare
+         use type C.int;
          use type asn_codecs_h.asn_dec_rval_code_e;
 
          Rval   : asn_codecs_h.asn_dec_rval_t;
@@ -135,8 +144,6 @@ is
 
          Check_Constraints :
          declare
-            use type C.int;
-
             Null_Buffer : constant C.char_array (1 .. 128)
               := (others => C.nul);
             Err_Buffer  : aliased C.char_array := Null_Buffer;
@@ -155,6 +162,7 @@ is
             end if;
          end Check_Constraints;
 
+         Key.Size := Positive (Data.modulus.size - 1) * 8;
          Key.N    := To_Unbounded_String
            (Utils.To_Hex_String (Num => Data.modulus));
          Key.E    := To_Unbounded_String

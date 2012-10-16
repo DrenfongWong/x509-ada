@@ -39,11 +39,17 @@ is
    function Get_Coefficient (Key : RSA_Private_Key_Type) return String;
    --  Return coefficient, (inverse of q) mod p.
 
+   function Get_Size (Key : RSA_Private_Key_Type) return Natural;
+   --  Return size of modulus in bits.
+
    Load_Error : exception;
 
 private
 
    type RSA_Private_Key_Type is record
+      Size : Natural := 0;
+      --  Size of modulus in bits.
+
       N, E, D, P, Q, Exp1, Exp2, Coe : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 

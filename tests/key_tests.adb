@@ -73,9 +73,14 @@ is
    begin
       Assert (Condition => Keys.Get_Modulus (Key => Privkey) = "",
               Message   => "Unexpected modulus");
+      Assert (Condition => Keys.Get_Size (Key => Privkey) = 0,
+              Message   => "Unexpected modulus size");
 
       Keys.Load (Filename => "data/key.der",
                  Key      => Privkey);
+
+      Assert (Condition => Keys.Get_Size (Key => Privkey) = 2048,
+              Message   => "Modulus size mismatch");
       Assert (Condition => Keys.Get_Modulus (Key => Privkey) = Ref_Modulus,
               Message   => "Modulus mismatch");
       Assert (Condition => Keys.Get_Pub_Exponent (Key => Privkey) = "010001",
