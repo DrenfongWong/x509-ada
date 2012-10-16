@@ -6,6 +6,9 @@ is
    type RSA_Private_Key_Type is private;
    --  PKCS#1 RSA private key.
 
+   Null_Private_Key : constant RSA_Private_Key_Type;
+   --  Uninitialized private key.
+
    procedure Load
      (Filename :     String;
       Key      : out RSA_Private_Key_Type);
@@ -43,5 +46,7 @@ private
    type RSA_Private_Key_Type is record
       N, E, D, P, Q, Exp1, Exp2, Coe : Ada.Strings.Unbounded.Unbounded_String;
    end record;
+
+   Null_Private_Key : constant RSA_Private_Key_Type := (others => <>);
 
 end X509.Keys;
