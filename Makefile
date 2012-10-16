@@ -26,6 +26,7 @@ install_lib: build_lib
 	install -m 644 src/ada/*.ad* $(PREFIX)/include/x509-ada
 	install -m 644 src/ada/thin/* $(PREFIX)/include/x509-ada
 	install -m 444 $(LIBDIR)/*.ali $(PREFIX)/lib/x509-ada
+	install -m 444 $(OBJDIR)/thin/*.ali $(PREFIX)/lib/x509-ada
 	install -m 644 $(GPR_FILES) $(PREFIX)/lib/gnat
 	install -m 444 $(LIBDIR)/libx509ada.a $(PREFIX)/lib
 
