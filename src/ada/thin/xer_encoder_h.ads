@@ -9,7 +9,7 @@ package xer_encoder_h is
 
    subtype xer_encoder_flags_e is unsigned;
    XER_F_BASIC : constant xer_encoder_flags_e := 1;
-   XER_F_CANONICAL : constant xer_encoder_flags_e := 2;  -- ../../c/pkcs1/xer_encoder.h:17
+   XER_F_CANONICAL : constant xer_encoder_flags_e := 2;  -- ../../c/common/xer_encoder.h:17
 
    function xer_encode
      (type_descriptor : access constr_TYPE_h.asn_TYPE_descriptor_s;
@@ -19,13 +19,13 @@ package xer_encoder_h is
         (arg1 : System.Address;
          arg2 : stddef_h.size_t;
          arg3 : System.Address) return int;
-      app_key : System.Address) return asn_codecs_h.asn_enc_rval_t;  -- ../../c/pkcs1/xer_encoder.h:26
+      app_key : System.Address) return asn_codecs_h.asn_enc_rval_t;  -- ../../c/common/xer_encoder.h:26
    pragma Import (C, xer_encode, "xer_encode");
 
    function xer_fprint
      (stream : access stdio_h.FILE;
       td : access constr_TYPE_h.asn_TYPE_descriptor_s;
-      sptr : System.Address) return int;  -- ../../c/pkcs1/xer_encoder.h:41
+      sptr : System.Address) return int;  -- ../../c/common/xer_encoder.h:41
    pragma Import (C, xer_fprint, "xer_fprint");
 
    --  skipped function type xer_type_encoder_f
