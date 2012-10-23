@@ -112,8 +112,8 @@ is
          RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
            (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,
             Data.all'Address, 0);
-         raise Load_Error with "Unable to load key '" & Filename
-           & "' : Broken key encoding at byte" & Rval.consumed'Img;
+         raise Load_Error with "Unable to load private key '" & Filename
+           & "' : Broken encoding at byte" & Rval.consumed'Img;
       end if;
 
       Check_Constraints :

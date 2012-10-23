@@ -42,8 +42,6 @@ is
    function Get_Size (Key : RSA_Private_Key_Type) return Natural;
    --  Return size of modulus in bits.
 
-   Load_Error : exception;
-
 private
 
    type RSA_Private_Key_Type is record

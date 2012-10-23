@@ -106,7 +106,7 @@ is
          Fail (Message => "Exception expected");
 
       exception
-         when Keys.Load_Error => null;
+         when Load_Error => null;
       end;
    end Load_Keys;
 
