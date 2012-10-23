@@ -1,8 +1,8 @@
-project X509_Ada is
-   for Source_Dirs use ("../../include/x509-ada");
+project X509ada is
+   for Source_Dirs use ("../../include/x509ada");
    for Library_Name use "x509ada";
    for Library_Dir use "../../lib";
-   for Library_ALI_Dir use "../../lib/x509-ada";
+   for Library_ALI_Dir use "../../lib/x509ada";
    for Library_Kind use "static";
    for Externally_Built use "true";
-end X509_Ada;
+end X509ada;
