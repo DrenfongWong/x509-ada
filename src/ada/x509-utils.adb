@@ -1,3 +1,6 @@
+with Ada.Direct_IO;
+with Ada.Exceptions;
+
 with System;
 
 with Interfaces.C;
@@ -6,11 +9,51 @@ package body X509.Utils
 is
 
    package C renames Interfaces.C;
+   package D_IO is new Ada.Direct_IO (Element_Type => Byte);
 
    Hex_Chars : constant String := "0123456789abcdef";
 
    function To_Hex_String (Input : Byte_Array) return String;
    --  Return hexadecimal string represenation of byte array.
+
+   -------------------------------------------------------------------------
+
+   function Read_File (Filename : String) return Byte_Array
+   is
+      File : D_IO.File_Type;
+      Size : D_IO.Count;
+   begin
+      begin
+         D_IO.Open (File => File,
+                    Mode => D_IO.In_File,
+                    Name => Filename);
+         Size := D_IO.Size (File => File);
+
+      exception
+         when E : others =>
+            raise IO_Error with "Unable to load file '" & Filename & "' : "
+              & Ada.Exceptions.Exception_Message (E);
+      end;
+
+      declare
+         Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
+      begin
+         for I in Buffer'Range loop
+            D_IO.Read (File => File,
+                       Item => Buffer (I));
+         end loop;
+         D_IO.Close (File => File);
+
+         return Buffer;
+
+      exception
+         when others =>
+            if D_IO.Is_Open (File => File) then
+               D_IO.Close (File => File);
+            end if;
+            raise;
+      end;
+   end Read_File;
 
    -------------------------------------------------------------------------
 

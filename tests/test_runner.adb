@@ -4,6 +4,7 @@ with Ahven.Text_Runner;
 with Ahven.Framework;
 
 with Key_Tests;
+with Util_Tests;
 
 procedure Test_Runner is
    use Ahven.Framework;
@@ -11,6 +12,8 @@ procedure Test_Runner is
    Name : constant String := "X.509 tests";
    S    : constant Test_Suite_Access := Create_Suite (Suite_Name => Name);
 begin
+   Add_Test (Suite => S.all,
+             T     => new Util_Tests.Testcase);
    Add_Test (Suite => S.all,
              T     => new Key_Tests.Testcase);
 

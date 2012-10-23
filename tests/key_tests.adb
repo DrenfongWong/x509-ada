@@ -108,15 +108,6 @@ is
       exception
          when Keys.Load_Error => null;
       end;
-
-      begin
-         Keys.Load (Filename => "/invalid/key/test",
-                    Key      => Privkey);
-         Fail (Message => "Exception expected");
-
-      exception
-         when Keys.Load_Error => null;
-      end;
    end Load_Keys;
 
 end Key_Tests;
