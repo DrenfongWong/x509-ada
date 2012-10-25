@@ -1,12 +1,11 @@
-with Interfaces.C.Strings;
+with Interfaces.C;
 
-with stddef_h;
 with ber_decoder_h;
-with constraints_h;
 with RSAPrivateKey_h;
 with RSAPublicKey_h;
 
 with X509.Utils;
+with X509.Constraints;
 
 package body X509.Keys
 is
@@ -142,25 +141,10 @@ is
            & "' : Broken encoding at byte" & Rval.consumed'Img;
       end if;
 
-      Check_Constraints :
-      declare
-         Null_Buffer : constant C.char_array (1 .. 128)
-           := (others => C.nul);
-         Err_Buffer  : aliased C.char_array := Null_Buffer;
-         Err_Len     : aliased stddef_h.size_t
-           := stddef_h.size_t (Err_Buffer'Length);
-      begin
-         if constraints_h.asn_check_constraints
-           (type_descriptor => RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Access,
-            struct_ptr      => Data.all'Address,
-            errbuf          => C.Strings.To_Chars_Ptr
-              (Item => Err_Buffer'Unchecked_Access),
-            errlen          => Err_Len'Access) = -1
-         then
-            raise Load_Error with "Constraint validation failed for '"
-              & Filename & "' : " & C.To_Ada (Err_Buffer);
-         end if;
-      end Check_Constraints;
+      Constraints.Check
+        (Type_Descriptor => RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Access,
+         Address         => Data.all'Address,
+         Error_Prefix    => "Validation failed for '" & Filename & "'");
 
       Key.Size := Positive (Data.modulus.size - 1) * 8;
       Key.N    := To_Unbounded_String
@@ -221,25 +205,10 @@ is
            & ": Broken encoding at byte" & Rval.consumed'Img;
       end if;
 
-      Check_Constraints :
-      declare
-         Null_Buffer : constant C.char_array (1 .. 128)
-           := (others => C.nul);
-         Err_Buffer  : aliased C.char_array := Null_Buffer;
-         Err_Len     : aliased stddef_h.size_t
-           := stddef_h.size_t (Err_Buffer'Length);
-      begin
-         if constraints_h.asn_check_constraints
-           (type_descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
-            struct_ptr      => Data.all'Address,
-            errbuf          => C.Strings.To_Chars_Ptr
-              (Item => Err_Buffer'Unchecked_Access),
-            errlen          => Err_Len'Access) = -1
-         then
-            raise Load_Error with "Public key constraint validation failed"
-              & ": " & C.To_Ada (Err_Buffer);
-         end if;
-      end Check_Constraints;
+      Constraints.Check
+        (Type_Descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
+         Address         => Data.all'Address,
+         Error_Prefix    => "Public key validation failed");
 
       Key.Size := Positive (Data.modulus.size - 1) * 8;
       Key.N    := To_Unbounded_String

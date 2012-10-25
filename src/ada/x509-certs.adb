@@ -1,11 +1,10 @@
-with Interfaces.C.Strings;
+with Interfaces.C;
 
-with stddef_h;
 with ber_decoder_h;
-with constraints_h;
 with Certificate_h;
 
 with X509.Utils;
+with X509.Constraints;
 
 package body X509.Certs
 is
@@ -62,25 +61,10 @@ is
            & "' : Broken encoding at byte" & Rval.consumed'Img;
       end if;
 
-      Check_Constraints :
-      declare
-         Null_Buffer : constant C.char_array (1 .. 128)
-           := (others => C.nul);
-         Err_Buffer  : aliased C.char_array := Null_Buffer;
-         Err_Len     : aliased stddef_h.size_t
-           := stddef_h.size_t (Err_Buffer'Length);
-      begin
-         if constraints_h.asn_check_constraints
-           (type_descriptor => Certificate_h.asn_DEF_Certificate'Access,
-            struct_ptr      => Data.all'Address,
-            errbuf          => C.Strings.To_Chars_Ptr
-              (Item => Err_Buffer'Unchecked_Access),
-            errlen          => Err_Len'Access) = -1
-         then
-            raise Load_Error with "Constraint validation failed for '"
-              & Filename & "' : " & C.To_Ada (Err_Buffer);
-         end if;
-      end Check_Constraints;
+      Constraints.Check
+        (Type_Descriptor => Certificate_h.asn_DEF_Certificate'Access,
+         Address         => Data.all'Address,
+         Error_Prefix    => "Validation failed for '" & Filename & "'");
 
       Keys.Load
         (Address => Data.tbsCertificate.subjectPublicKeyInfo.
