@@ -42,6 +42,9 @@ is
       T.Add_Test_Routine
         (Routine => Load_Random_Certs'Access,
          Name    => "Load random certificates");
+      T.Add_Test_Routine
+        (Routine => Load_Random_Chunk'Access,
+         Name    => "Load random chunks");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -74,7 +77,7 @@ is
    procedure Load_Random_Certs
    is
       Cert       : Certs.Certificate_Type;
-      Cert_Count : constant        := 512;
+      Cert_Count : constant        := 256;
       Certfile   : constant String := "obj/cert.der";
    begin
       for I in 1 .. Cert_Count loop
@@ -95,5 +98,32 @@ is
 
       Ada.Directories.Delete_File (Name => Certfile);
    end Load_Random_Certs;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Random_Chunk
+   is
+      Cert       : Certs.Certificate_Type;
+      Cert_Count : constant        := 256;
+      Certfile   : constant String := "obj/cert.der";
+   begin
+      for I in 1 .. Cert_Count loop
+         Test_Utils.Execute
+           (Command     => "scripts/fuzz.sh",
+            Interpreter => "/bin/bash",
+            Output_File => Certfile);
+
+         begin
+            Certs.Load (Filename => Certfile,
+                        Cert     => Cert);
+            Fail (Message => "Exception expected");
+
+         exception
+            when Load_Error => null;
+         end;
+      end loop;
+
+      Ada.Directories.Delete_File (Name => Certfile);
+   end Load_Random_Chunk;
 
 end Cert_Tests;

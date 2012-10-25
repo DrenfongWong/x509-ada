@@ -14,4 +14,7 @@ is
    procedure Load_Random_Certs;
    --  Test loading of randomly generated X.509 certs.
 
+   procedure Load_Random_Chunk;
+   --  Test loading of random chunks.
+
 end Cert_Tests;
