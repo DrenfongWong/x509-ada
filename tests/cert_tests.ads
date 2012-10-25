@@ -8,7 +8,10 @@ is
    procedure Initialize (T : in out Testcase);
    --  Initialize testcase.
 
-   procedure Load_Certs;
+   procedure Load_Cert;
    --  Test loading of X.509 certs.
+
+   procedure Load_Random_Certs;
+   --  Test loading of randomly generated X.509 certs.
 
 end Cert_Tests;

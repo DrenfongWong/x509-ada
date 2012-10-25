@@ -1,5 +1,10 @@
+with Ada.Directories;
+
 with X509.Certs;
 with X509.Keys;
+with X509.Constraints;
+
+with Test_Utils;
 
 package body Cert_Tests
 is
@@ -32,13 +37,16 @@ is
    begin
       T.Set_Name (Name => "Certificate tests");
       T.Add_Test_Routine
-        (Routine => Load_Certs'Access,
-         Name    => "Load X.509 certificates");
+        (Routine => Load_Cert'Access,
+         Name    => "Load certificate");
+      T.Add_Test_Routine
+        (Routine => Load_Random_Certs'Access,
+         Name    => "Load random certificates");
    end Initialize;
 
    -------------------------------------------------------------------------
 
-   procedure Load_Certs
+   procedure Load_Cert
    is
       Cert   : Certs.Certificate_Type;
       Pubkey : Keys.RSA_Public_Key_Type;
@@ -59,6 +67,33 @@ is
 
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
               Message   => "Signature mismatch");
-   end Load_Certs;
+   end Load_Cert;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Random_Certs
+   is
+      Cert       : Certs.Certificate_Type;
+      Cert_Count : constant        := 512;
+      Certfile   : constant String := "obj/cert.der";
+   begin
+      for I in 1 .. Cert_Count loop
+         Test_Utils.Execute
+           (Command     => "scripts/x509random.pl",
+            Interpreter => "/usr/bin/perl",
+            Output_File => Certfile);
+
+         begin
+            Certs.Load (Filename => Certfile,
+                        Cert     => Cert);
+            Fail (Message => "Exception expected");
+
+         exception
+            when Constraints.Constraints_Error => null;
+         end;
+      end loop;
+
+      Ada.Directories.Delete_File (Name => Certfile);
+   end Load_Random_Certs;
 
 end Cert_Tests;
