@@ -12,7 +12,8 @@ is
       Address         : System.Address;
       Error_Prefix    : String);
    --  Perform constraint checks for ASN.1 type identified by type descriptor
-   --  and buffer address. Raises an exception if the check fails.
+   --  and buffer address. If the check fails, the procedure raises an
+   --  exception and frees the memory allocated by the type.
 
    Constraints_Error : exception;
 

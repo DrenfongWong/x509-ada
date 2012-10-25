@@ -29,6 +29,8 @@ is
            (Item => Err_Buffer'Unchecked_Access),
          errlen          => Err_Len'Access) = -1
       then
+         Type_Descriptor.free_struct
+           (Type_Descriptor.all'Address, Address, 0);
          raise Constraints_Error with Error_Prefix & ": "
            & C.To_Ada (Err_Buffer);
       end if;
