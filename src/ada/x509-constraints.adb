@@ -31,7 +31,7 @@ is
       then
          Type_Descriptor.free_struct
            (Type_Descriptor.all'Address, Address, 0);
-         raise Constraints_Error with Error_Prefix & ": "
+         raise Validation_Error with Error_Prefix & ": "
            & C.To_Ada (Err_Buffer);
       end if;
    end Check;

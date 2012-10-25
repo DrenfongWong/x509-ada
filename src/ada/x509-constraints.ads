@@ -15,6 +15,6 @@ is
    --  and buffer address. If the check fails, the procedure raises an
    --  exception and frees the memory allocated by the type.
 
-   Constraints_Error : exception;
+   Validation_Error : exception;
 
 end X509.Constraints;
