@@ -66,12 +66,11 @@ is
          Address         => Data.all'Address,
          Error_Prefix    => "Validation failed for '" & Filename & "'");
 
-      Keys.Load
+      Cert.Pubkey.Load
         (Address => Data.tbsCertificate.subjectPublicKeyInfo.
            subjectPublicKey.buf.all'Address,
          Size    => Integer (Data.tbsCertificate.subjectPublicKeyInfo.
-             subjectPublicKey.size),
-         Key     => Cert.Pubkey);
+             subjectPublicKey.size));
       Cert.Signature := To_Unbounded_String
         (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
                               Size    => Data.signature.size));

@@ -51,22 +51,6 @@ is
 
    -------------------------------------------------------------------------
 
-   function Get_Modulus (Key : RSA_Private_Key_Type) return String
-   is
-   begin
-      return To_String (Key.N);
-   end Get_Modulus;
-
-   -------------------------------------------------------------------------
-
-   function Get_Modulus (Key : RSA_Public_Key_Type) return String
-   is
-   begin
-      return To_String (Key.N);
-   end Get_Modulus;
-
-   -------------------------------------------------------------------------
-
    function Get_Prime_P (Key : RSA_Private_Key_Type) return String
    is
    begin
@@ -99,22 +83,6 @@ is
 
    -------------------------------------------------------------------------
 
-   function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String
-   is
-   begin
-      return To_String (Key.E);
-   end Get_Pub_Exponent;
-
-   -------------------------------------------------------------------------
-
-   function Get_Pub_Exponent (Key : RSA_Public_Key_Type) return String
-   is
-   begin
-      return To_String (Key.E);
-   end Get_Pub_Exponent;
-
-   -------------------------------------------------------------------------
-
    function Get_Size (Key : Key_Type) return Natural
    is
    begin
@@ -123,25 +91,9 @@ is
 
    -------------------------------------------------------------------------
 
-   function Get_Size (Key : RSA_Private_Key_Type) return Natural
-   is
-   begin
-      return Key.Size;
-   end Get_Size;
-
-   -------------------------------------------------------------------------
-
-   function Get_Size (Key : RSA_Public_Key_Type) return Natural
-   is
-   begin
-      return Key.Size;
-   end Get_Size;
-
-   -------------------------------------------------------------------------
-
    procedure Load
-     (Filename :     String;
-      Key      : out RSA_Private_Key_Type)
+     (Key      : out RSA_Private_Key_Type;
+      Filename :     String)
    is
       use type C.int;
       use type asn_codecs_h.asn_dec_rval_code_e;
@@ -204,9 +156,9 @@ is
    -------------------------------------------------------------------------
 
    procedure Load
-     (Address :     System.Address;
-      Size    :     Positive;
-      Key     : out RSA_Public_Key_Type)
+     (Key     : out RSA_Public_Key_Type;
+      Address :     System.Address;
+      Size    :     Positive)
    is
       use type C.int;
       use type asn_codecs_h.asn_dec_rval_code_e;

@@ -50,11 +50,11 @@ is
                   Cert     => Cert);
 
       Pubkey := Certs.Get_Public_Key (Cert);
-      Assert (Condition => Keys.Get_Pub_Exponent (Key => Pubkey) = "010001",
+      Assert (Condition => Pubkey.Get_Pub_Exponent = "010001",
               Message   => "Pubkey exponent mismatch");
-      Assert (Condition => Keys.Get_Size (Key => Pubkey) = 2048,
+      Assert (Condition => Pubkey.Get_Size = 2048,
               Message   => "Pubkey modulus size mismatch");
-      Assert (Condition => Keys.Get_Modulus (Key => Pubkey) = Ref_Modulus,
+      Assert (Condition => Pubkey.Get_Modulus = Ref_Modulus,
               Message   => "Pubkey modulus mismatch");
 
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,

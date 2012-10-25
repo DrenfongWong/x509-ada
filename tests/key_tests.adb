@@ -71,33 +71,30 @@ is
    is
       Privkey : Keys.RSA_Private_Key_Type;
    begin
-      Assert (Condition => Keys.Get_Modulus (Key => Privkey) = "",
+      Assert (Condition => Privkey.Get_Modulus = "",
               Message   => "Unexpected modulus");
-      Assert (Condition => Keys.Get_Size (Key => Privkey) = 0,
+      Assert (Condition => Privkey.Get_Size = 0,
               Message   => "Unexpected modulus size");
 
-      Keys.Load (Filename => "data/privkey.der",
-                 Key      => Privkey);
+      Privkey.Load (Filename => "data/privkey.der");
 
-      Assert (Condition => Keys.Get_Size (Key => Privkey) = 2048,
+      Assert (Condition => Privkey.Get_Size = 2048,
               Message   => "Modulus size mismatch");
-      Assert (Condition => Keys.Get_Modulus (Key => Privkey) = Ref_Modulus,
+      Assert (Condition => Privkey.Get_Modulus = Ref_Modulus,
               Message   => "Modulus mismatch");
-      Assert (Condition => Keys.Get_Pub_Exponent (Key => Privkey) = "010001",
+      Assert (Condition => Privkey.Get_Pub_Exponent = "010001",
               Message   => "Public exponent mismatch");
-      Assert (Condition => Keys.Get_Priv_Exponent
-              (Key => Privkey) = Ref_Priv_Exp,
+      Assert (Condition => Privkey.Get_Priv_Exponent = Ref_Priv_Exp,
               Message   => "Private exponent mismatch");
-      Assert (Condition => Keys.Get_Prime_P (Key => Privkey) = Ref_Prime1,
+      Assert (Condition => Privkey.Get_Prime_P = Ref_Prime1,
               Message   => "Prime p mismatch");
-      Assert (Condition => Keys.Get_Prime_Q (Key => Privkey) = Ref_Prime2,
+      Assert (Condition => Privkey.Get_Prime_Q = Ref_Prime2,
               Message   => "Prime q mismatch");
-      Assert (Condition => Keys.Get_Exponent1 (Key => Privkey) = Ref_Exp1,
+      Assert (Condition => Privkey.Get_Exponent1 = Ref_Exp1,
               Message   => "Exponent 1 mismatch");
-      Assert (Condition => Keys.Get_Exponent2 (Key => Privkey) = Ref_Exp2,
+      Assert (Condition => Privkey.Get_Exponent2 = Ref_Exp2,
               Message   => "Exponent 2 mismatch");
-      Assert (Condition => Keys.Get_Coefficient
-              (Key => Privkey) = Ref_Coefficient,
+      Assert (Condition => Privkey.Get_Coefficient = Ref_Coefficient,
               Message   => "Coefficient mismatch");
 
       begin

@@ -2,6 +2,8 @@ with Ada.Strings.Unbounded;
 
 with X509.Keys;
 
+pragma Elaborate_All (X509.Keys);
+
 package X509.Certs
 is
 
