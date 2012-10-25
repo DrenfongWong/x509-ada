@@ -43,6 +43,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Modulus (Key : Key_Type) return String
+   is
+   begin
+      return To_String (Key.N);
+   end Get_Modulus;
+
+   -------------------------------------------------------------------------
+
    function Get_Modulus (Key : RSA_Private_Key_Type) return String
    is
    begin
@@ -83,6 +91,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Pub_Exponent (Key : Key_Type) return String
+   is
+   begin
+      return To_String (Key.E);
+   end Get_Pub_Exponent;
+
+   -------------------------------------------------------------------------
+
    function Get_Pub_Exponent (Key : RSA_Private_Key_Type) return String
    is
    begin
@@ -96,6 +112,14 @@ is
    begin
       return To_String (Key.E);
    end Get_Pub_Exponent;
+
+   -------------------------------------------------------------------------
+
+   function Get_Size (Key : Key_Type) return Natural
+   is
+   begin
+      return Key.Size;
+   end Get_Size;
 
    -------------------------------------------------------------------------
 

@@ -5,6 +5,17 @@ with System;
 package X509.Keys
 is
 
+   type Key_Type is abstract tagged private;
+
+   function Get_Modulus (Key : Key_Type) return String;
+   --  Return modulus of key.
+
+   function Get_Pub_Exponent (Key : Key_Type) return String;
+   --  Return public exponent.
+
+   function Get_Size (Key : Key_Type) return Natural;
+   --  Return size of modulus in bits.
+
    -----------------
    -- Private key --
    -----------------
@@ -75,6 +86,13 @@ is
    --  Return size of modulus in bits.
 
 private
+
+   type Key_Type is tagged record
+      Size : Natural := 0;
+      --  Size of modulus in bits.
+
+      N, E : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
    type RSA_Private_Key_Type is record
       Size : Natural := 0;
