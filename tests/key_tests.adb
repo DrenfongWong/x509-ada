@@ -76,7 +76,7 @@ is
       Assert (Condition => Keys.Get_Size (Key => Privkey) = 0,
               Message   => "Unexpected modulus size");
 
-      Keys.Load (Filename => "data/key.der",
+      Keys.Load (Filename => "data/privkey.der",
                  Key      => Privkey);
 
       Assert (Condition => Keys.Get_Size (Key => Privkey) = 2048,
@@ -101,7 +101,7 @@ is
               Message   => "Coefficient mismatch");
 
       begin
-         Keys.Load (Filename => "data/key_invalid.der",
+         Keys.Load (Filename => "data/privkey_invalid.der",
                     Key      => Privkey);
          Fail (Message => "Exception expected");
 

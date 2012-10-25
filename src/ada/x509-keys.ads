@@ -1,7 +1,13 @@
 with Ada.Strings.Unbounded;
 
+with System;
+
 package X509.Keys
 is
+
+   -----------------
+   -- Private key --
+   -----------------
 
    type RSA_Private_Key_Type is private;
    --  PKCS#1 RSA private key.
@@ -42,6 +48,32 @@ is
    function Get_Size (Key : RSA_Private_Key_Type) return Natural;
    --  Return size of modulus in bits.
 
+   ----------------
+   -- Public key --
+   ----------------
+
+   type RSA_Public_Key_Type is private;
+   --  PKCS#1 RSA public key.
+
+   Null_Public_Key : constant RSA_Public_Key_Type;
+   --  Uninitialized public key.
+
+   procedure Load
+     (Address :     System.Address;
+      Size    :     Positive;
+      Key     : out RSA_Public_Key_Type);
+   --  Load RSA public key from buffer starting at given address. Raises an
+   --  exception if the parsing failed.
+
+   function Get_Modulus (Key : RSA_Public_Key_Type) return String;
+   --  Return modulus of public key.
+
+   function Get_Pub_Exponent (Key : RSA_Public_Key_Type) return String;
+   --  Return exponent.
+
+   function Get_Size (Key : RSA_Public_Key_Type) return Natural;
+   --  Return size of modulus in bits.
+
 private
 
    type RSA_Private_Key_Type is record
@@ -51,6 +83,14 @@ private
       N, E, D, P, Q, Exp1, Exp2, Coe : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
+   type RSA_Public_Key_Type is record
+      Size : Natural := 0;
+      --  Size of modulus in bits.
+
+      N, E : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
    Null_Private_Key : constant RSA_Private_Key_Type := (others => <>);
+   Null_Public_Key : constant RSA_Public_Key_Type := (others => <>);
 
 end X509.Keys;

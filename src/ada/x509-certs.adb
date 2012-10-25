@@ -18,6 +18,16 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Public_Key
+     (Cert : Certificate_Type)
+      return Keys.RSA_Public_Key_Type
+   is
+   begin
+      return Cert.Pubkey;
+   end Get_Public_Key;
+
+   -------------------------------------------------------------------------
+
    function Get_Signature (Cert : Certificate_Type) return String
    is
    begin
@@ -72,6 +82,12 @@ is
          end if;
       end Check_Constraints;
 
+      Keys.Load
+        (Address => Data.tbsCertificate.subjectPublicKeyInfo.
+           subjectPublicKey.buf.all'Address,
+         Size    => Integer (Data.tbsCertificate.subjectPublicKeyInfo.
+             subjectPublicKey.size),
+         Key     => Cert.Pubkey);
       Cert.Signature := To_Unbounded_String
         (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
                               Size    => Data.signature.size));

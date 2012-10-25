@@ -4,6 +4,7 @@ with stddef_h;
 with ber_decoder_h;
 with constraints_h;
 with RSAPrivateKey_h;
+with RSAPublicKey_h;
 
 with X509.Utils;
 
@@ -14,7 +15,8 @@ is
 
    package C renames Interfaces.C;
 
-   type Key_Access is access all RSAPrivateKey_h.RSAPrivateKey_t;
+   type Privkey_Access is access all RSAPrivateKey_h.RSAPrivateKey_t;
+   type Pubkey_Access is access all RSAPublicKey_h.RSAPublicKey_t;
 
    -------------------------------------------------------------------------
 
@@ -43,6 +45,14 @@ is
    -------------------------------------------------------------------------
 
    function Get_Modulus (Key : RSA_Private_Key_Type) return String
+   is
+   begin
+      return To_String (Key.N);
+   end Get_Modulus;
+
+   -------------------------------------------------------------------------
+
+   function Get_Modulus (Key : RSA_Public_Key_Type) return String
    is
    begin
       return To_String (Key.N);
@@ -82,7 +92,23 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Pub_Exponent (Key : RSA_Public_Key_Type) return String
+   is
+   begin
+      return To_String (Key.E);
+   end Get_Pub_Exponent;
+
+   -------------------------------------------------------------------------
+
    function Get_Size (Key : RSA_Private_Key_Type) return Natural
+   is
+   begin
+      return Key.Size;
+   end Get_Size;
+
+   -------------------------------------------------------------------------
+
+   function Get_Size (Key : RSA_Public_Key_Type) return Natural
    is
    begin
       return Key.Size;
@@ -97,7 +123,7 @@ is
       use type C.int;
       use type asn_codecs_h.asn_dec_rval_code_e;
 
-      Data   : Key_Access;
+      Data   : Privkey_Access;
       Rval   : asn_codecs_h.asn_dec_rval_t;
       Buffer : Byte_Array := Utils.Read_File (Filename);
    begin
@@ -164,6 +190,67 @@ is
 
       RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
         (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,
+         Data.all'Address, 0);
+   end Load;
+
+   -------------------------------------------------------------------------
+
+   procedure Load
+     (Address :     System.Address;
+      Size    :     Positive;
+      Key     : out RSA_Public_Key_Type)
+   is
+      use type C.int;
+      use type asn_codecs_h.asn_dec_rval_code_e;
+
+      Data : Pubkey_Access;
+      Rval : asn_codecs_h.asn_dec_rval_t;
+   begin
+      Rval := ber_decoder_h.ber_decode
+        (opt_codec_ctx   => null,
+         type_descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
+         struct_ptr      => Data'Address,
+         buffer          => Address,
+         size            => C.unsigned_long (Size));
+
+      if Rval.code /= asn_codecs_h.RC_OK then
+         RSAPublicKey_h.asn_DEF_RSAPublicKey.free_struct
+           (RSAPublicKey_h.asn_DEF_RSAPublicKey'Address,
+            Data.all'Address, 0);
+         raise Load_Error with "Unable to load public key from buffer"
+           & ": Broken encoding at byte" & Rval.consumed'Img;
+      end if;
+
+      Check_Constraints :
+      declare
+         Null_Buffer : constant C.char_array (1 .. 128)
+           := (others => C.nul);
+         Err_Buffer  : aliased C.char_array := Null_Buffer;
+         Err_Len     : aliased stddef_h.size_t
+           := stddef_h.size_t (Err_Buffer'Length);
+      begin
+         if constraints_h.asn_check_constraints
+           (type_descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
+            struct_ptr      => Data.all'Address,
+            errbuf          => C.Strings.To_Chars_Ptr
+              (Item => Err_Buffer'Unchecked_Access),
+            errlen          => Err_Len'Access) = -1
+         then
+            raise Load_Error with "Public key constraint validation failed"
+              & ": " & C.To_Ada (Err_Buffer);
+         end if;
+      end Check_Constraints;
+
+      Key.Size := Positive (Data.modulus.size - 1) * 8;
+      Key.N    := To_Unbounded_String
+        (Utils.To_Hex_String (Address => Data.modulus.buf.all'Address,
+                              Size    => Data.modulus.size));
+      Key.E    := To_Unbounded_String
+        (Utils.To_Hex_String (Address => Data.publicExponent.buf.all'Address,
+                              Size    => Data.publicExponent.size));
+
+      RSAPublicKey_h.asn_DEF_RSAPublicKey.free_struct
+        (RSAPublicKey_h.asn_DEF_RSAPublicKey'Address,
          Data.all'Address, 0);
    end Load;
 
