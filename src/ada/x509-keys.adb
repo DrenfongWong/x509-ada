@@ -138,21 +138,29 @@ is
 
       Key.Size := Positive (Data.modulus.size - 1) * 8;
       Key.N    := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.modulus));
+        (Utils.To_Hex_String (Address => Data.modulus.buf.all'Address,
+                              Size    => Data.modulus.size));
       Key.E    := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.publicExponent));
+        (Utils.To_Hex_String (Address => Data.publicExponent.buf.all'Address,
+                              Size    => Data.publicExponent.size));
       Key.D    := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.privateExponent));
+        (Utils.To_Hex_String (Address => Data.privateExponent.buf.all'Address,
+                              Size    => Data.privateExponent.size));
       Key.P    := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.prime1));
+        (Utils.To_Hex_String (Address => Data.prime1.buf.all'Address,
+                              Size    => Data.prime1.size));
       Key.Q    := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.prime2));
+        (Utils.To_Hex_String (Address => Data.prime2.buf.all'Address,
+                              Size    => Data.prime2.size));
       Key.Exp1 := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.exponent1));
+        (Utils.To_Hex_String (Address => Data.exponent1.buf.all'Address,
+                              Size    => Data.exponent1.size));
       Key.Exp2 := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.exponent2));
+        (Utils.To_Hex_String (Address => Data.exponent2.buf.all'Address,
+                              Size    => Data.exponent2.size));
       Key.Coe  := To_Unbounded_String
-        (Utils.To_Hex_String (Num => Data.coefficient));
+        (Utils.To_Hex_String (Address => Data.coefficient.buf.all'Address,
+                              Size    => Data.coefficient.size));
 
       RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
         (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,

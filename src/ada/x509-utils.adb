@@ -1,10 +1,6 @@
 with Ada.Direct_IO;
 with Ada.Exceptions;
 
-with System;
-
-with Interfaces.C;
-
 package body X509.Utils
 is
 
@@ -94,7 +90,10 @@ is
 
    -------------------------------------------------------------------------
 
-   function To_Hex_String (Num : INTEGER_h.INTEGER_t) return String
+   function To_Hex_String
+     (Address : System.Address;
+      Size    : Interfaces.C.int)
+      return String
    is
       procedure C_Memcpy
         (Dst : System.Address;
@@ -102,11 +101,11 @@ is
          Len : C.size_t);
       pragma Import (C, C_Memcpy, "memcpy");
 
-      Buffer : Byte_Array (1 .. Integer (Num.size)) := (others => 0);
+      Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
    begin
       C_Memcpy (Dst => Buffer'Address,
-                Src => Num.buf.all'Address,
-                Len => C.size_t (Num.size));
+                Src => Address,
+                Len => C.size_t (Size));
       return To_Hex_String (Input => Buffer);
    end To_Hex_String;
 
