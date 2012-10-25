@@ -3,8 +3,9 @@ with Ada.Text_IO;
 with Ahven.Text_Runner;
 with Ahven.Framework;
 
-with Key_Tests;
 with Util_Tests;
+with Key_Tests;
+with Cert_Tests;
 
 procedure Test_Runner is
    use Ahven.Framework;
@@ -16,6 +17,8 @@ begin
              T     => new Util_Tests.Testcase);
    Add_Test (Suite => S.all,
              T     => new Key_Tests.Testcase);
+   Add_Test (Suite => S.all,
+             T     => new Cert_Tests.Testcase);
 
    Ada.Text_IO.Put_Line ("Running " & Name & " ... please wait");
 
