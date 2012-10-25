@@ -17,4 +17,7 @@ is
    procedure Load_Random_Chunk;
    --  Test loading of random chunks.
 
+   procedure Load_Random_ASN1;
+   --  Test loading of random ASN1 structures.
+
 end Cert_Tests;

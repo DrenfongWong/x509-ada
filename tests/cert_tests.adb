@@ -45,6 +45,9 @@ is
       T.Add_Test_Routine
         (Routine => Load_Random_Chunk'Access,
          Name    => "Load random chunks");
+      T.Add_Test_Routine
+        (Routine => Load_Random_ASN1'Access,
+         Name    => "Load random ASN.1 structures");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -71,6 +74,33 @@ is
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
               Message   => "Signature mismatch");
    end Load_Cert;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Random_ASN1
+   is
+      Cert       : Certs.Certificate_Type;
+      Cert_Count : constant        := 128;
+      Certfile   : constant String := "obj/cert.der";
+   begin
+      for I in 1 .. Cert_Count loop
+         Test_Utils.Execute
+           (Command     => "scripts/asn1random.pl",
+            Interpreter => "/usr/bin/perl",
+            Output_File => Certfile);
+
+         begin
+            Certs.Load (Filename => Certfile,
+                        Cert     => Cert);
+            Fail (Message => "Exception expected");
+
+         exception
+            when Load_Error => null;
+         end;
+      end loop;
+
+      Ada.Directories.Delete_File (Name => Certfile);
+   end Load_Random_ASN1;
 
    -------------------------------------------------------------------------
 
