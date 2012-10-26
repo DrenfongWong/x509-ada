@@ -35,19 +35,19 @@ is
 
    -------------------------------------------------------------------------
 
-   function Get_Sigalg (Cert : Certificate_Type) return Oids.Oid_Type
-   is
-   begin
-      return Cert.Signature_Alg;
-   end Get_Sigalg;
-
-   -------------------------------------------------------------------------
-
    function Get_Signature (Cert : Certificate_Type) return String
    is
    begin
       return To_String (Cert.Signature);
    end Get_Signature;
+
+   -------------------------------------------------------------------------
+
+   function Get_Signature_Alg (Cert : Certificate_Type) return Oids.Oid_Type
+   is
+   begin
+      return Cert.Signature_Alg;
+   end Get_Signature_Alg;
 
    -------------------------------------------------------------------------
 

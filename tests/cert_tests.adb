@@ -62,7 +62,7 @@ is
    begin
       Assert (Condition => Certs.Get_Signature (Cert) = "",
               Message   => "Unexpected signature");
-      Assert (Condition => Certs.Get_Sigalg (Cert) = Oids.Undefined,
+      Assert (Condition => Certs.Get_Signature_Alg (Cert) = Oids.Undefined,
               Message   => "Unexpected sigalg");
       Assert (Condition => Certs.Get_Pubkey_Alg (Cert) = Oids.Undefined,
               Message   => "Unexpected pubkey alg");
@@ -82,7 +82,7 @@ is
               Message   => "Pubkey algorithm mismatch");
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
               Message   => "Signature mismatch");
-      Assert (Condition => Certs.Get_Sigalg
+      Assert (Condition => Certs.Get_Signature_Alg
               (Cert) = Oids.sha256WithRSAEncryption,
               Message   => "Signature algorithm mismatch");
    end Load_Cert;

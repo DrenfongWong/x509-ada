@@ -31,7 +31,7 @@ is
    function Get_Signature (Cert : Certificate_Type) return String;
    --  Return certificate signature.
 
-   function Get_Sigalg (Cert : Certificate_Type) return Oids.Oid_Type;
+   function Get_Signature_Alg (Cert : Certificate_Type) return Oids.Oid_Type;
    --  Return signature algorithm identifier.
 
 private
