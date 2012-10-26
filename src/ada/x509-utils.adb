@@ -12,6 +12,12 @@ is
    function To_Hex_String (Input : Byte_Array) return String;
    --  Return hexadecimal string represenation of byte array.
 
+   procedure C_Memcpy
+     (Dst : System.Address;
+      Src : System.Address;
+      Len : C.size_t);
+   pragma Import (C, C_Memcpy, "memcpy");
+
    -------------------------------------------------------------------------
 
    function Read_File (Filename : String) return Byte_Array
@@ -95,12 +101,6 @@ is
       Size    : Interfaces.C.int)
       return String
    is
-      procedure C_Memcpy
-        (Dst : System.Address;
-         Src : System.Address;
-         Len : C.size_t);
-      pragma Import (C, C_Memcpy, "memcpy");
-
       Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
    begin
       C_Memcpy (Dst => Buffer'Address,
@@ -108,5 +108,25 @@ is
                 Len => C.size_t (Size));
       return To_Hex_String (Input => Buffer);
    end To_Hex_String;
+
+   -------------------------------------------------------------------------
+
+   function To_String
+     (Address : System.Address;
+      Size    : Interfaces.C.int)
+      return String
+   is
+      Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
+      Result : String (Buffer'Range);
+   begin
+      C_Memcpy (Dst => Buffer'Address,
+                Src => Address,
+                Len => C.size_t (Size));
+      for I in Result'Range loop
+         Result (I) := Character'Val (Buffer (I));
+      end loop;
+
+      return Result;
+   end To_String;
 
 end X509.Utils;
