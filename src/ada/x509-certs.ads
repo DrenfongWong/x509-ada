@@ -25,6 +25,9 @@ is
       return Keys.RSA_Public_Key_Type;
    --  Return public key of certificate.
 
+   function Get_Pubkey_Alg (Cert : Certificate_Type) return Oids.Oid_Type;
+   --  Return public key algorithm identifier.
+
    function Get_Signature (Cert : Certificate_Type) return String;
    --  Return certificate signature.
 
@@ -37,6 +40,7 @@ private
       Signature     : Ada.Strings.Unbounded.Unbounded_String;
       Signature_Alg : Oids.Oid_Type            := Oids.Undefined;
       Pubkey        : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
+      Pubkey_Alg    : Oids.Oid_Type            := Oids.Undefined;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);

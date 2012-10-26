@@ -64,6 +64,8 @@ is
               Message   => "Unexpected signature");
       Assert (Condition => Certs.Get_Sigalg (Cert) = Oids.Undefined,
               Message   => "Unexpected sigalg");
+      Assert (Condition => Certs.Get_Pubkey_Alg (Cert) = Oids.Undefined,
+              Message   => "Unexpected pubkey alg");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -76,6 +78,8 @@ is
       Assert (Condition => Pubkey.Get_Modulus = Ref_Modulus,
               Message   => "Pubkey modulus mismatch");
 
+      Assert (Condition => Certs.Get_Pubkey_Alg (Cert) = Oids.rsaEncryption,
+              Message   => "Pubkey algorithm mismatch");
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
               Message   => "Signature mismatch");
       Assert (Condition => Certs.Get_Sigalg

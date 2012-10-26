@@ -17,6 +17,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Pubkey_Alg (Cert : Certificate_Type) return Oids.Oid_Type
+   is
+   begin
+      return Cert.Pubkey_Alg;
+   end Get_Pubkey_Alg;
+
+   -------------------------------------------------------------------------
+
    function Get_Public_Key
      (Cert : Certificate_Type)
       return Keys.RSA_Public_Key_Type
@@ -76,12 +84,20 @@ is
 
       Extract_Data :
       begin
+
+         --  Signature
+
          Cert.Signature := To_Unbounded_String
            (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
                                  Size    => Data.signature.size));
          Cert.Signature_Alg := Oids.To_Ada
            (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
 
+         --  Public key
+
+         Cert.Pubkey_Alg := Oids.To_Ada
+           (Asn_Oid => Data.tbsCertificate.subjectPublicKeyInfo.
+              algorithm.algorithm'Access);
          Cert.Pubkey.Load
            (Address => Data.tbsCertificate.subjectPublicKeyInfo.
               subjectPublicKey.buf.all'Address,
