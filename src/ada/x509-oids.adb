@@ -85,4 +85,6 @@ begin
                    New_Item => sha1WithRSAEncryption);
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 11),
                    New_Item => sha256WithRSAEncryption);
+   Oid_Map.Insert (Key      => (2, 5, 4, 6),
+                   New_Item => countryName);
 end X509.Oids;

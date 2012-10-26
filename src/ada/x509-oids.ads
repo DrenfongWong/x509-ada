@@ -12,7 +12,11 @@ is
       --  RFC 4055
 
       sha1WithRSAEncryption,
-      sha256WithRSAEncryption);
+      sha256WithRSAEncryption,
+
+      --  RFC 5280
+
+      countryName);
    --  Object identifiers.
 
    type Asn_Oid_Handle is not null access
