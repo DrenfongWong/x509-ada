@@ -79,6 +79,8 @@ is
    end To_String;
 
 begin
+   Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 1),
+                   New_Item => rsaEncryption);
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 5),
                    New_Item => sha1WithRSAEncryption);
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 11),

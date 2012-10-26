@@ -4,6 +4,13 @@ package X509.Oids
 is
    type Oid_Type is
      (Undefined,
+
+      --  RFC 3447
+
+      rsaEncryption,
+
+      --  RFC 4055
+
       sha1WithRSAEncryption,
       sha256WithRSAEncryption);
    --  Object identifiers.
