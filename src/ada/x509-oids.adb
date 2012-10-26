@@ -81,10 +81,14 @@ is
 begin
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 1),
                    New_Item => rsaEncryption);
+
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 5),
                    New_Item => sha1WithRSAEncryption);
    Oid_Map.Insert (Key      => (1, 2, 840, 113549, 1, 1, 11),
                    New_Item => sha256WithRSAEncryption);
+
+   Oid_Map.Insert (Key      => (2, 5, 4, 3),
+                   New_Item => commonName);
    Oid_Map.Insert (Key      => (2, 5, 4, 6),
                    New_Item => countryName);
    Oid_Map.Insert (Key      => (2, 5, 4, 10),

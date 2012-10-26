@@ -16,6 +16,7 @@ is
 
       --  RFC 5280
 
+      commonName,
       countryName,
       organizationName);
    --  Object identifiers.
