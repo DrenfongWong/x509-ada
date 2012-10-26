@@ -1,6 +1,7 @@
 with Ada.Strings.Unbounded;
 
 with X509.Keys;
+with X509.Oids;
 
 pragma Elaborate_All (X509.Keys);
 
@@ -27,11 +28,15 @@ is
    function Get_Signature (Cert : Certificate_Type) return String;
    --  Return certificate signature.
 
+   function Get_Sigalg (Cert : Certificate_Type) return Oids.Oid_Type;
+   --  Return signature algorithm identifier.
+
 private
 
    type Certificate_Type is record
-      Signature : Ada.Strings.Unbounded.Unbounded_String;
-      Pubkey    : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
+      Signature     : Ada.Strings.Unbounded.Unbounded_String;
+      Signature_Alg : Oids.Oid_Type            := Oids.Undefined;
+      Pubkey        : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);

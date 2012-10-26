@@ -3,6 +3,7 @@ with Ada.Directories;
 with X509.Certs;
 with X509.Keys;
 with X509.Constraints;
+with X509.Oids;
 
 with Test_Utils;
 
@@ -54,11 +55,15 @@ is
 
    procedure Load_Cert
    is
+      use type Oids.Oid_Type;
+
       Cert   : Certs.Certificate_Type;
       Pubkey : Keys.RSA_Public_Key_Type;
    begin
       Assert (Condition => Certs.Get_Signature (Cert) = "",
               Message   => "Unexpected signature");
+      Assert (Condition => Certs.Get_Sigalg (Cert) = Oids.Undefined,
+              Message   => "Unexpected sigalg");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -73,6 +78,9 @@ is
 
       Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
               Message   => "Signature mismatch");
+      Assert (Condition => Certs.Get_Sigalg
+              (Cert) = Oids.sha256WithRSAEncryption,
+              Message   => "Signature algorithm mismatch");
    end Load_Cert;
 
    -------------------------------------------------------------------------

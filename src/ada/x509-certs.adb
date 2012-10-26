@@ -27,6 +27,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Sigalg (Cert : Certificate_Type) return Oids.Oid_Type
+   is
+   begin
+      return Cert.Signature_Alg;
+   end Get_Sigalg;
+
+   -------------------------------------------------------------------------
+
    function Get_Signature (Cert : Certificate_Type) return String
    is
    begin
@@ -66,14 +74,17 @@ is
          Address         => Data.all'Address,
          Error_Prefix    => "Validation failed for '" & Filename & "'");
 
+      Cert.Signature := To_Unbounded_String
+        (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
+                              Size    => Data.signature.size));
+      Cert.Signature_Alg := Oids.To_Ada
+        (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
+
       Cert.Pubkey.Load
         (Address => Data.tbsCertificate.subjectPublicKeyInfo.
            subjectPublicKey.buf.all'Address,
          Size    => Integer (Data.tbsCertificate.subjectPublicKeyInfo.
              subjectPublicKey.size));
-      Cert.Signature := To_Unbounded_String
-        (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
-                              Size    => Data.signature.size));
 
       Certificate_h.asn_DEF_Certificate.free_struct
         (Certificate_h.asn_DEF_Certificate'Address, Data.all'Address, 0);
