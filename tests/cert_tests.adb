@@ -122,7 +122,7 @@ is
             Fail (Message => "Exception expected");
 
          exception
-            when Constraints.Validation_Error => null;
+            when Constraints.Validation_Error | Load_Error => null;
          end;
       end loop;
 

@@ -106,11 +106,17 @@ sub emit_random_data($$)
 sub emit_asn1_prim(@)
 {
     my ($class, $tag, $minlen, $maxlen) = @_;
-    my $content;
+    my $content = '';
 
     $minlen = 0 if (!$minlen);
     $maxlen = 255 if (!$maxlen);
-    $content = ($tag == $NULL) ? '' : emit_random_data($minlen, $maxlen);
+
+    if ($tag == $BIT_STRING) {
+        # BIT_STRINGs need a valid bits_unused value (0 - 7), try to get
+        # it right from time to time
+        $content .= pack("C", int(rand(9)));
+    }
+    $content .= ($tag == $NULL) ? '' : emit_random_data($minlen, $maxlen);
 
     $tag |= $class;
     return emit_asn1_hdr($tag, length($content)) . $content;
@@ -177,6 +183,24 @@ sub emit_asn1_utctime($$)
 
 ###############################################################################
 #
+# Generate a valid UTC time
+#
+###############################################################################
+sub emit_asn1_utctime_valid($$)
+{
+    my ($class, $tag) = @_;
+    my $len;
+    my $output = '090827100724Z';
+
+    $len = length($output);
+
+    $tag |= $class;
+
+    return emit_asn1_hdr($tag, $len) . $output;
+}
+
+###############################################################################
+#
 # Generate a generalized time
 #
 ###############################################################################
@@ -197,6 +221,25 @@ sub emit_asn1_gentime($$)
 
     return emit_asn1_hdr($tag, $len) . $output;
 }
+
+###############################################################################
+#
+# Generate a valid generalized time
+#
+###############################################################################
+sub emit_asn1_gentime_valid($$)
+{
+    my ($class, $tag) = @_;
+    my $len;
+    my $output = '19920521000000Z';
+
+    $len = length($output);
+
+    $tag |= $class;
+
+    return emit_asn1_hdr($tag, $len) . $output;
+}
+
 
 ###############################################################################
 #
@@ -324,11 +367,17 @@ sub emit_x509_Extensions()
 ###############################################################################
 sub emit_x509_Time()
 {
+    my $r = int(rand(3));
+
     # UTCTime or GeneralizedTime
-    if (int(rand(2)) == 0) {
-	return emit_asn1_utctime($UNIV, $UTCTime);
+    if ($r == 0) {
+        return emit_asn1_utctime($UNIV, $UTCTime);
+    } elsif ($r == 1) {
+        return emit_asn1_utctime_valid($UNIV, $UTCTime);
+    } elsif ($r == 2) {
+        return emit_asn1_gentime($UNIV, $GeneralizedTime);
     } else {
-	return emit_asn1_gentime($UNIV, $GeneralizedTime);
+        return emit_asn1_gentime_valid($UNIV, $GeneralizedTime);
     }
 }
 
