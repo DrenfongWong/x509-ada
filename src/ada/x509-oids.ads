@@ -16,7 +16,8 @@ is
 
       --  RFC 5280
 
-      countryName);
+      countryName,
+      organizationName);
    --  Object identifiers.
 
    type Asn_Oid_Handle is not null access
