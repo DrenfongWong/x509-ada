@@ -91,6 +91,8 @@ begin
                    New_Item => commonName);
    Oid_Map.Insert (Key      => (2, 5, 4, 6),
                    New_Item => countryName);
+   Oid_Map.Insert (Key      => (2, 5, 4, 11),
+                   New_Item => organizationalUnitName);
    Oid_Map.Insert (Key      => (2, 5, 4, 10),
                    New_Item => organizationName);
 end X509.Oids;

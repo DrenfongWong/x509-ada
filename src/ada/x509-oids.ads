@@ -18,6 +18,7 @@ is
 
       commonName,
       countryName,
+      organizationalUnitName,
       organizationName);
    --  Object identifiers.
 
