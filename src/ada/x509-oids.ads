@@ -22,6 +22,7 @@ is
       organizationName,
       subjectKeyIdentifier,
       keyUsage,
+      subjectAltName,
       basicConstraints,
       authorityKeyIdentifier);
    --  Object identifiers.

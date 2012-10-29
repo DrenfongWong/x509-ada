@@ -101,6 +101,8 @@ begin
                    New_Item => subjectKeyIdentifier);
    Oid_Map.Insert (Key      => (2, 5, 29, 15),
                    New_Item => keyUsage);
+   Oid_Map.Insert (Key      => (2, 5, 29, 17),
+                   New_Item => subjectAltName);
    Oid_Map.Insert (Key      => (2, 5, 29, 19),
                    New_Item => basicConstraints);
    Oid_Map.Insert (Key      => (2, 5, 29, 35),
