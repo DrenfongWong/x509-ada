@@ -3,6 +3,7 @@ with Certificate_h;
 with X509.Utils;
 with X509.Decoder;
 with X509.Constraints;
+with X509.Names;
 
 package body X509.Certs
 is
@@ -10,6 +11,14 @@ is
    use Ada.Strings.Unbounded;
 
    type Cert_Access is access all Certificate_h.Certificate_t;
+
+   -------------------------------------------------------------------------
+
+   function Get_Issuer (Cert : Certificate_Type) return String
+   is
+   begin
+      return To_String (Cert.Issuer);
+   end Get_Issuer;
 
    -------------------------------------------------------------------------
 
@@ -75,6 +84,11 @@ is
                                  Size    => Data.signature.size));
          Cert.Signature_Alg := Oids.To_Ada
            (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
+
+         --  Issuer
+
+         Cert.Issuer := To_Unbounded_String
+           (Names.To_Ada (Asn_Name => Data.tbsCertificate.issuer'Access));
 
          --  Public key
 

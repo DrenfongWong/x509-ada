@@ -4,6 +4,7 @@ with X509.Certs;
 with X509.Keys;
 with X509.Constraints;
 with X509.Oids;
+with X509.Names;
 
 with Test_Utils;
 
@@ -66,6 +67,8 @@ is
               Message   => "Unexpected sigalg");
       Assert (Condition => Certs.Get_Pubkey_Alg (Cert) = Oids.Undefined,
               Message   => "Unexpected pubkey alg");
+      Assert (Condition => Certs.Get_Issuer (Cert) = "",
+              Message   => "Unexpected issuer");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -85,6 +88,10 @@ is
       Assert (Condition => Certs.Get_Signature_Alg
               (Cert) = Oids.sha256WithRSAEncryption,
               Message   => "Signature algorithm mismatch");
+
+      Assert (Condition => Certs.Get_Issuer (Cert) =
+                "C=CH, O=Linux strongSwan, CN=strongSwan Root CA",
+              Message   => "Issuer mismatch");
    end Load_Cert;
 
    -------------------------------------------------------------------------
@@ -134,7 +141,9 @@ is
             Fail (Message => "Exception expected");
 
          exception
-            when Constraints.Validation_Error | Load_Error => null;
+            when Load_Error
+               | Constraints.Validation_Error
+               | Names.Conversion_Error => null;
          end;
       end loop;
 

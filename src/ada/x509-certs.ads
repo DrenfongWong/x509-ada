@@ -34,6 +34,9 @@ is
    function Get_Signature_Alg (Cert : Certificate_Type) return Oids.Oid_Type;
    --  Return signature algorithm identifier.
 
+   function Get_Issuer (Cert : Certificate_Type) return String;
+   --  Return issuer of certificate.
+
 private
 
    type Certificate_Type is record
@@ -41,6 +44,7 @@ private
       Signature_Alg : Oids.Oid_Type            := Oids.Undefined;
       Pubkey        : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
       Pubkey_Alg    : Oids.Oid_Type            := Oids.Undefined;
+      Issuer        : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);
