@@ -105,6 +105,8 @@ begin
                    New_Item => subjectAltName);
    Oid_Map.Insert (Key      => (2, 5, 29, 19),
                    New_Item => basicConstraints);
+   Oid_Map.Insert (Key      => (2, 5, 29, 31),
+                   New_Item => cRLDistributionPoints);
    Oid_Map.Insert (Key      => (2, 5, 29, 35),
                    New_Item => authorityKeyIdentifier);
 end X509.Oids;

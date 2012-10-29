@@ -24,6 +24,7 @@ is
       keyUsage,
       subjectAltName,
       basicConstraints,
+      cRLDistributionPoints,
       authorityKeyIdentifier);
    --  Object identifiers.
 
