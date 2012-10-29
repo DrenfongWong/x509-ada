@@ -8,6 +8,4 @@ is
    function To_Ada (Asn_Name : Asn_Name_Handle) return String;
    --  Convert given ASN.1 name structure to string.
 
-   Conversion_Error : exception;
-
 end X509.Names;

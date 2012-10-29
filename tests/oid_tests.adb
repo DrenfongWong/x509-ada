@@ -35,7 +35,7 @@ is
          Oid := Oids.To_Ada (A'Unchecked_Access);
 
       exception
-         when Oids.Conversion_Error => null;
+         when Conversion_Error => null;
       end;
 
       A.buf  := Unknown (Unknown'First)'Unchecked_Access;
@@ -45,7 +45,7 @@ is
          Oid := Oids.To_Ada (A'Unchecked_Access);
 
       exception
-         when E : Oids.Conversion_Error =>
+         when E : Conversion_Error =>
             Assert (Condition => Ada.Exceptions.Exception_Message
                     (E) = "Unsupported OID: 1.3",
                     Message   => "Invalid exception message");

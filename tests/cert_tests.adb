@@ -4,7 +4,6 @@ with X509.Certs;
 with X509.Keys;
 with X509.Constraints;
 with X509.Oids;
-with X509.Names;
 
 with Test_Utils;
 
@@ -149,7 +148,7 @@ is
          exception
             when Load_Error
                | Constraints.Validation_Error
-               | Names.Conversion_Error => null;
+               | Conversion_Error => null;
          end;
       end loop;
 

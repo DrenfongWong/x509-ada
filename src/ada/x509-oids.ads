@@ -28,6 +28,4 @@ is
    function To_Ada (Asn_Oid : Asn_Oid_Handle) return Oid_Type;
    --  Convert given ASN.1 OID structure to Ada OID type.
 
-   Conversion_Error : exception;
-
 end X509.Oids;
