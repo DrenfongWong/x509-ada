@@ -103,4 +103,6 @@ begin
                    New_Item => keyUsage);
    Oid_Map.Insert (Key      => (2, 5, 29, 19),
                    New_Item => basicConstraints);
+   Oid_Map.Insert (Key      => (2, 5, 29, 35),
+                   New_Item => authorityKeyIdentifier);
 end X509.Oids;

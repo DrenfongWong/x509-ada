@@ -22,7 +22,8 @@ is
       organizationName,
       subjectKeyIdentifier,
       keyUsage,
-      basicConstraints);
+      basicConstraints,
+      authorityKeyIdentifier);
    --  Object identifiers.
 
    function To_Ada
