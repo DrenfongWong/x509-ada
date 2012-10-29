@@ -9,7 +9,10 @@ is
    --  Initialize testcase.
 
    procedure Load_Cert;
-   --  Test loading of X.509 certs.
+   --  Test loading of a X.509 cert.
+
+   procedure Load_Ca_Cert;
+   --  Test loading of a X.509 CA cert.
 
    procedure Load_Random_Certs;
    --  Test loading of randomly generated X.509 certs.

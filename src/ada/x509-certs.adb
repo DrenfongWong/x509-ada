@@ -4,6 +4,7 @@ with X509.Utils;
 with X509.Decoder;
 with X509.Constraints;
 with X509.Names;
+with X509.Extensions;
 
 package body X509.Certs
 is
@@ -74,6 +75,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Is_Ca (Cert : Certificate_Type) return Boolean
+   is
+   begin
+      return Cert.Is_Ca;
+   end Is_Ca;
+
+   -------------------------------------------------------------------------
+
    procedure Load
      (Filename :     String;
       Cert     : out Certificate_Type)
@@ -119,6 +128,11 @@ is
 
          Cert.Validity_Period := Validity.To_Ada
            (Asn_Validity => Data.tbsCertificate.validity'Access);
+
+         --  Extensions
+
+         Cert.Is_Ca := Extensions.Is_Ca
+           (Asn_Ext => Data.tbsCertificate.the_extensions);
 
          --  Public key
 

@@ -43,6 +43,9 @@ is
         (Routine => Load_Cert'Access,
          Name    => "Load certificate");
       T.Add_Test_Routine
+        (Routine => Load_Ca_Cert'Access,
+         Name    => "Load CA certificate");
+      T.Add_Test_Routine
         (Routine => Load_Random_Certs'Access,
          Name    => "Load random certificates");
       T.Add_Test_Routine
@@ -52,6 +55,21 @@ is
         (Routine => Load_Random_ASN1'Access,
          Name    => "Load random ASN.1 structures");
    end Initialize;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Ca_Cert
+   is
+      Cert : Certs.Certificate_Type;
+   begin
+      Assert (Condition => not Certs.Is_Ca (Cert),
+              Message   => "Unexpected CA status");
+
+      Certs.Load (Filename => "data/ca.der",
+                  Cert     => Cert);
+      Assert (Condition => Certs.Is_Ca (Cert),
+              Message   => "CA status not True");
+   end Load_Ca_Cert;
 
    -------------------------------------------------------------------------
 
@@ -102,6 +120,9 @@ is
       Assert (Condition => Certs.Get_Subject (Cert) =
                 "C=CH, O=Linux strongSwan, OU=Sales, CN=alice@strongswan.org",
               Message   => "Subject mismatch");
+
+      Assert (Condition => not Certs.Is_Ca (Cert),
+              Message   => "CA status mismatch");
 
       declare
          use type Ada.Calendar.Time;

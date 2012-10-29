@@ -46,6 +46,9 @@ is
       return Validity.Validity_Type;
    --  Return certificate validity period.
 
+   function Is_Ca (Cert : Certificate_Type) return Boolean;
+   --  Returns True if the given certificate is a Certificate Authority.
+
 private
 
    type Certificate_Type is record
@@ -56,6 +59,7 @@ private
       Pubkey          : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
       Pubkey_Alg      : Oids.Oid_Type            := Oids.Undefined;
       Validity_Period : Validity.Validity_Type   := Validity.Null_Validity;
+      Is_Ca           : Boolean                  := False;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);
