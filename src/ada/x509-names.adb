@@ -9,6 +9,7 @@ with RelativeDistinguishedName_h;
 with X520CommonName_h;
 with X520OrganizationName_h;
 with X520countryName_h;
+with X520OrganizationalUnitName_h;
 
 with X509.Utils;
 with X509.Oids;
@@ -33,6 +34,12 @@ is
       Size   : Positive)
       return String;
    --  Decode and check X520countryName.
+
+   function Decode_Organizational_Unit_Name
+     (Buffer : System.Address;
+      Size   : Positive)
+      return String;
+   --  Decode and check X520OrganizationalUnitName.
 
    function Decode_Organization_Name
      (Buffer : System.Address;
@@ -151,9 +158,52 @@ is
             asn_DEF_X520OrganizationName.free_struct
               (asn_DEF_X520OrganizationName'Address, Data.all'Address, 0);
             raise Conversion_Error with "X520OrganizationName contains "
-              & " unsupported string type";
+              & "unsupported string type";
       end case;
    end Decode_Organization_Name;
+
+   -------------------------------------------------------------------------
+
+   function Decode_Organizational_Unit_Name
+     (Buffer : System.Address;
+      Size   : Positive)
+      return String
+   is
+      use X520OrganizationalUnitName_h;
+
+      type OU_Name_Access is access all X520OrganizationalUnitName_t;
+
+      Data : OU_Name_Access;
+   begin
+      Decoder.Decode
+        (Type_Descriptor  => asn_DEF_X520OrganizationalUnitName'Access,
+         Type_Handle_Addr => Data'Address,
+         Buffer           => Buffer,
+         Buffer_Size      => Size,
+         Error_Prefix     => "X520OrganizationalUnitName decoding failed");
+      Constraints.Check
+        (Type_Descriptor => asn_DEF_X520OrganizationalUnitName'Access,
+         Address         => Data.all'Address,
+         Error_Prefix    => "X520OrganizationalUnitName validation failed");
+
+      case Data.present is
+         when X520OrganizationalUnitName_PR_printableString =>
+            return S : constant String := "OU=" & Utils.To_String
+              (Address => Data.choice.printableString.buf.all'Address,
+               Size    => Data.choice.printableString.size)
+            do
+               asn_DEF_X520OrganizationalUnitName.free_struct
+                 (asn_DEF_X520OrganizationalUnitName'Address,
+                  Data.all'Address, 0);
+            end return;
+         when others =>
+            asn_DEF_X520OrganizationalUnitName.free_struct
+              (asn_DEF_X520OrganizationalUnitName'Address,
+               Data.all'Address, 0);
+            raise Conversion_Error with "X520OrganizationalUnitName contains "
+              & "unsupported string type";
+      end case;
+   end Decode_Organizational_Unit_Name;
 
    -------------------------------------------------------------------------
 
@@ -209,6 +259,10 @@ is
                         Size   => Positive (A.value.size));
                   when Oids.organizationName =>
                      Result := Result & Decode_Organization_Name
+                       (Buffer => A.value.buf.all'Address,
+                        Size   => Positive (A.value.size));
+                  when Oids.organizationalUnitName =>
+                     Result := Result & Decode_Organizational_Unit_Name
                        (Buffer => A.value.buf.all'Address,
                         Size   => Positive (A.value.size));
                   when others =>
