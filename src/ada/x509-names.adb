@@ -23,6 +23,13 @@ is
 
    package C renames Interfaces.C;
 
+   function Decode_X520
+     (Oid    : Oids.Oid_Type;
+      Buffer : System.Address;
+      Size   : Positive)
+      return String;
+   --  Decode X520 name.
+
    function Decode_Common_Name
      (Buffer : System.Address;
       Size   : Positive)
@@ -215,6 +222,37 @@ is
 
    -------------------------------------------------------------------------
 
+   function Decode_X520
+     (Oid    : Oids.Oid_Type;
+      Buffer : System.Address;
+      Size   : Positive)
+      return String
+   is
+   begin
+      case Oid is
+         when Oids.commonName =>
+            return Decode_Common_Name
+              (Buffer => Buffer,
+               Size   => Size);
+         when Oids.countryName =>
+            return Decode_Country_Name
+              (Buffer => Buffer,
+               Size   => Size);
+         when Oids.organizationName =>
+            return Decode_Organization_Name
+              (Buffer => Buffer,
+               Size   => Size);
+         when Oids.organizationalUnitName =>
+            return Decode_Organizational_Unit_Name
+              (Buffer => Buffer,
+               Size   => Size);
+         when others =>
+            raise Conversion_Error with Oid'Img & " unsupported";
+      end case;
+   end Decode_X520;
+
+   -------------------------------------------------------------------------
+
    function To_Ada (Asn_Name : Asn_Name_Handle) return String
    is
       use type C.int;
@@ -256,26 +294,10 @@ is
                   Result := Result & ", ";
                end if;
 
-               case Oid is
-                  when Oids.commonName =>
-                     Result := Result & Decode_Common_Name
-                       (Buffer => A.value.buf.all'Address,
-                        Size   => Positive (A.value.size));
-                  when Oids.countryName =>
-                     Result := Result & Decode_Country_Name
-                       (Buffer => A.value.buf.all'Address,
-                        Size   => Positive (A.value.size));
-                  when Oids.organizationName =>
-                     Result := Result & Decode_Organization_Name
-                       (Buffer => A.value.buf.all'Address,
-                        Size   => Positive (A.value.size));
-                  when Oids.organizationalUnitName =>
-                     Result := Result & Decode_Organizational_Unit_Name
-                       (Buffer => A.value.buf.all'Address,
-                        Size   => Positive (A.value.size));
-                  when others =>
-                     raise Conversion_Error with Oid'Img & " unsupported";
-               end case;
+               Result := Result & Decode_X520
+                 (Oid    => Oid,
+                  Buffer => A.value.buf.all'Address,
+                  Size   => Positive (A.value.size));
             end;
          end;
       end loop;
