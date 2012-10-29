@@ -25,7 +25,9 @@ is
 
    -------------------------------------------------------------------------
 
-   function To_Ada (Asn_Oid : Asn_Oid_Handle) return Oid_Type
+   function To_Ada
+     (Asn_Oid : access OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t)
+      return Oid_Type
    is
       use type C.int;
       use type C.unsigned;

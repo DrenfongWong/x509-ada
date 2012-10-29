@@ -288,7 +288,7 @@ is
 
             declare
                Oid : constant Oids.Oid_Type
-                 := Oids.To_Ada (Asn_Oid => A.c_type'Unchecked_Access);
+                 := Oids.To_Ada (Asn_Oid => A.c_type'Access);
             begin
                if I /= 0 then
                   Result := Result & ", ";

@@ -32,7 +32,7 @@ is
       Oid : Oids.Oid_Type;
    begin
       begin
-         Oid := Oids.To_Ada (A'Unchecked_Access);
+         Oid := Oids.To_Ada (A'Access);
 
       exception
          when Conversion_Error => null;
@@ -42,7 +42,7 @@ is
       A.size := Unknown'Length;
 
       begin
-         Oid := Oids.To_Ada (A'Unchecked_Access);
+         Oid := Oids.To_Ada (A'Access);
 
       exception
          when E : Conversion_Error =>
@@ -54,7 +54,7 @@ is
       A.buf  := Known (Known'First)'Unchecked_Access;
       A.size := Known'Length;
 
-      Oid := Oids.To_Ada (Asn_Oid => A'Unchecked_Access);
+      Oid := Oids.To_Ada (Asn_Oid => A'Access);
 
       Assert (Condition => Oid = Oids.sha256WithRSAEncryption,
               Message   => "Invalid OID");
