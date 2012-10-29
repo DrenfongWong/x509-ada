@@ -20,6 +20,7 @@ is
       countryName,
       organizationalUnitName,
       organizationName,
+      keyUsage,
       basicConstraints);
    --  Object identifiers.
 
