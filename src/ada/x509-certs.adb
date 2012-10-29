@@ -1,17 +1,13 @@
-with Interfaces.C;
-
-with ber_decoder_h;
 with Certificate_h;
 
 with X509.Utils;
+with X509.Decoder;
 with X509.Constraints;
 
 package body X509.Certs
 is
 
    use Ada.Strings.Unbounded;
-
-   package C renames Interfaces.C;
 
    type Cert_Access is access all Certificate_h.Certificate_t;
 
@@ -55,28 +51,15 @@ is
      (Filename :     String;
       Cert     : out Certificate_Type)
    is
-      use type C.int;
-      use type asn_codecs_h.asn_dec_rval_code_e;
-
       Data   : Cert_Access;
-      Rval   : asn_codecs_h.asn_dec_rval_t;
       Buffer : Byte_Array := Utils.Read_File (Filename);
    begin
-      Rval := ber_decoder_h.ber_decode
-        (opt_codec_ctx   => null,
-         type_descriptor => Certificate_h.asn_DEF_Certificate'Access,
-         struct_ptr      => Data'Address,
-         buffer          => Buffer'Address,
-         size            => C.unsigned_long (Buffer'Length));
-
-      if Rval.code /= asn_codecs_h.RC_OK then
-         Certificate_h.asn_DEF_Certificate.free_struct
-           (Certificate_h.asn_DEF_Certificate'Address,
-            Data.all'Address, 0);
-         raise Load_Error with "Unable to load certificate '" & Filename
-           & "' : Broken encoding at byte" & Rval.consumed'Img;
-      end if;
-
+      Decoder.Decode
+        (Type_Descriptor  => Certificate_h.asn_DEF_Certificate'Access,
+         Type_Handle_Addr => Data'Address,
+         Buffer           => Buffer'Address,
+         Buffer_Size      => Buffer'Length,
+         Error_Prefix     => "Unable to load certificate '" & Filename & "'");
       Constraints.Check
         (Type_Descriptor => Certificate_h.asn_DEF_Certificate'Access,
          Address         => Data.all'Address,

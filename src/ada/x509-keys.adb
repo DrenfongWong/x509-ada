@@ -1,18 +1,16 @@
 with Interfaces.C;
 
-with ber_decoder_h;
 with RSAPrivateKey_h;
 with RSAPublicKey_h;
 
 with X509.Utils;
+with X509.Decoder;
 with X509.Constraints;
 
 package body X509.Keys
 is
 
    use Ada.Strings.Unbounded;
-
-   package C renames Interfaces.C;
 
    type Privkey_Access is access all RSAPrivateKey_h.RSAPrivateKey_t;
    type Pubkey_Access is access all RSAPublicKey_h.RSAPublicKey_t;
@@ -95,28 +93,17 @@ is
      (Key      : out RSA_Private_Key_Type;
       Filename :     String)
    is
-      use type C.int;
-      use type asn_codecs_h.asn_dec_rval_code_e;
+      use type Interfaces.C.int;
 
       Data   : Privkey_Access;
-      Rval   : asn_codecs_h.asn_dec_rval_t;
       Buffer : Byte_Array := Utils.Read_File (Filename);
    begin
-      Rval := ber_decoder_h.ber_decode
-        (opt_codec_ctx   => null,
-         type_descriptor => RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Access,
-         struct_ptr      => Data'Address,
-         buffer          => Buffer'Address,
-         size            => C.unsigned_long (Buffer'Length));
-
-      if Rval.code /= asn_codecs_h.RC_OK then
-         RSAPrivateKey_h.asn_DEF_RSAPrivateKey.free_struct
-           (RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Address,
-            Data.all'Address, 0);
-         raise Load_Error with "Unable to load private key '" & Filename
-           & "' : Broken encoding at byte" & Rval.consumed'Img;
-      end if;
-
+      Decoder.Decode
+        (Type_Descriptor  => RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Access,
+         Type_Handle_Addr => Data'Address,
+         Buffer           => Buffer'Address,
+         Buffer_Size      => Buffer'Length,
+         Error_Prefix     => "Unable to load private key '" & Filename & "'");
       Constraints.Check
         (Type_Descriptor => RSAPrivateKey_h.asn_DEF_RSAPrivateKey'Access,
          Address         => Data.all'Address,
@@ -160,27 +147,16 @@ is
       Address :     System.Address;
       Size    :     Positive)
    is
-      use type C.int;
-      use type asn_codecs_h.asn_dec_rval_code_e;
+      use type Interfaces.C.int;
 
       Data : Pubkey_Access;
-      Rval : asn_codecs_h.asn_dec_rval_t;
    begin
-      Rval := ber_decoder_h.ber_decode
-        (opt_codec_ctx   => null,
-         type_descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
-         struct_ptr      => Data'Address,
-         buffer          => Address,
-         size            => C.unsigned_long (Size));
-
-      if Rval.code /= asn_codecs_h.RC_OK then
-         RSAPublicKey_h.asn_DEF_RSAPublicKey.free_struct
-           (RSAPublicKey_h.asn_DEF_RSAPublicKey'Address,
-            Data.all'Address, 0);
-         raise Load_Error with "Unable to load public key from buffer"
-           & ": Broken encoding at byte" & Rval.consumed'Img;
-      end if;
-
+      Decoder.Decode
+        (Type_Descriptor  => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
+         Type_Handle_Addr => Data'Address,
+         Buffer           => Address,
+         Buffer_Size      => Size,
+         Error_Prefix     => "Unable to load public key from buffer");
       Constraints.Check
         (Type_Descriptor => RSAPublicKey_h.asn_DEF_RSAPublicKey'Access,
          Address         => Data.all'Address,
