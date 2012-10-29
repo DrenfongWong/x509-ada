@@ -69,6 +69,8 @@ is
               Message   => "Unexpected pubkey alg");
       Assert (Condition => Certs.Get_Issuer (Cert) = "",
               Message   => "Unexpected issuer");
+      Assert (Condition => Certs.Get_Subject (Cert) = "",
+              Message   => "Unexpected subject");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -92,6 +94,10 @@ is
       Assert (Condition => Certs.Get_Issuer (Cert) =
                 "C=CH, O=Linux strongSwan, CN=strongSwan Root CA",
               Message   => "Issuer mismatch");
+
+      Assert (Condition => Certs.Get_Subject (Cert) =
+                "C=CH, O=Linux strongSwan, OU=Sales, CN=alice@strongswan.org",
+              Message   => "Subject mismatch");
    end Load_Cert;
 
    -------------------------------------------------------------------------

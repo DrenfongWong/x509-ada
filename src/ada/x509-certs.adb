@@ -56,6 +56,14 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Subject (Cert : Certificate_Type) return String
+   is
+   begin
+      return To_String (Cert.Subject);
+   end Get_Subject;
+
+   -------------------------------------------------------------------------
+
    procedure Load
      (Filename :     String;
       Cert     : out Certificate_Type)
@@ -90,10 +98,12 @@ is
          Cert.Signature_Alg := Oids.To_Ada
            (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
 
-         --  Issuer
+         --  Issuer & Subject
 
-         Cert.Issuer := To_Unbounded_String
+         Cert.Issuer  := To_Unbounded_String
            (Names.To_Ada (Asn_Name => Data.tbsCertificate.issuer'Access));
+         Cert.Subject := To_Unbounded_String
+           (Names.To_Ada (Asn_Name => Data.tbsCertificate.subject'Access));
 
          --  Public key
 

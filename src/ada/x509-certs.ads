@@ -35,7 +35,10 @@ is
    --  Return signature algorithm identifier.
 
    function Get_Issuer (Cert : Certificate_Type) return String;
-   --  Return issuer of certificate.
+   --  Return certificate issuer.
+
+   function Get_Subject (Cert : Certificate_Type) return String;
+   --  Return certificate subject.
 
 private
 
@@ -45,6 +48,7 @@ private
       Pubkey        : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
       Pubkey_Alg    : Oids.Oid_Type            := Oids.Undefined;
       Issuer        : Ada.Strings.Unbounded.Unbounded_String;
+      Subject       : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);
