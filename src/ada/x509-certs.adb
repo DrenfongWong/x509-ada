@@ -64,6 +64,16 @@ is
 
    -------------------------------------------------------------------------
 
+   function Get_Validity
+     (Cert : Certificate_Type)
+      return Validity.Validity_Type
+   is
+   begin
+      return Cert.Validity_Period;
+   end Get_Validity;
+
+   -------------------------------------------------------------------------
+
    procedure Load
      (Filename :     String;
       Cert     : out Certificate_Type)
@@ -104,6 +114,11 @@ is
            (Names.To_Ada (Asn_Name => Data.tbsCertificate.issuer'Access));
          Cert.Subject := To_Unbounded_String
            (Names.To_Ada (Asn_Name => Data.tbsCertificate.subject'Access));
+
+         --  Validity
+
+         Cert.Validity_Period := Validity.To_Ada
+           (Asn_Validity => Data.tbsCertificate.validity'Access);
 
          --  Public key
 

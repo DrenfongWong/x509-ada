@@ -7,6 +7,7 @@ with Util_Tests;
 with Key_Tests;
 with Cert_Tests;
 with Oid_Tests;
+with Validity_Tests;
 
 procedure Test_Runner is
    use Ahven.Framework;
@@ -22,6 +23,8 @@ begin
              T     => new Cert_Tests.Testcase);
    Add_Test (Suite => S.all,
              T     => new Oid_Tests.Testcase);
+   Add_Test (Suite => S.all,
+             T     => new Validity_Tests.Testcase);
 
    Ada.Text_IO.Put_Line ("Running " & Name & " ... please wait");
 

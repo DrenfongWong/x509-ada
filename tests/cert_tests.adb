@@ -1,9 +1,11 @@
 with Ada.Directories;
+with Ada.Calendar.Time_Zones;
 
 with X509.Certs;
 with X509.Keys;
 with X509.Constraints;
 with X509.Oids;
+with X509.Validity;
 
 with Test_Utils;
 
@@ -56,6 +58,7 @@ is
    procedure Load_Cert
    is
       use type Oids.Oid_Type;
+      use type Validity.Validity_Type;
 
       Cert   : Certs.Certificate_Type;
       Pubkey : Keys.RSA_Public_Key_Type;
@@ -70,6 +73,8 @@ is
               Message   => "Unexpected issuer");
       Assert (Condition => Certs.Get_Subject (Cert) = "",
               Message   => "Unexpected subject");
+      Assert (Condition => Certs.Get_Validity (Cert) = Validity.Null_Validity,
+              Message   => "Unexpected validity");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -97,6 +102,40 @@ is
       Assert (Condition => Certs.Get_Subject (Cert) =
                 "C=CH, O=Linux strongSwan, OU=Sales, CN=alice@strongswan.org",
               Message   => "Subject mismatch");
+
+      declare
+         use type Ada.Calendar.Time;
+         use type Ada.Calendar.Time_Zones.Time_Offset;
+
+         V  : constant Validity.Validity_Type := Certs.Get_Validity (Cert);
+         T1 : Ada.Calendar.Time
+           := Ada.Calendar.Time_Of
+             (Year    => 2009,
+              Month   => 8,
+              Day     => 27,
+              Seconds => 36444.0);
+         T2 : Ada.Calendar.Time
+           := Ada.Calendar.Time_Of
+             (Year    => 2014,
+              Month   => 8,
+              Day     => 26,
+              Seconds => 36444.0);
+      begin
+
+         --  Add TZ specific time offset to reference times.
+
+         T1 := T1 + Duration
+           (Ada.Calendar.Time_Zones.UTC_Time_Offset (T1) * 60);
+         T2 := T2 + Duration
+           (Ada.Calendar.Time_Zones.UTC_Time_Offset (T2) * 60);
+
+         Assert (Condition => Validity.Get_Start (V) = T1,
+                 Message   => "Validity start mismatch");
+         Assert (Condition => Validity.Get_End (V) = T2,
+                 Message   => "Validity end mismatch");
+         Assert (Condition => Validity.Is_Valid (V),
+                 Message   => "Cert not valid");
+      end;
    end Load_Cert;
 
    -------------------------------------------------------------------------

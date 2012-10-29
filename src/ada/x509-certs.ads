@@ -2,6 +2,7 @@ with Ada.Strings.Unbounded;
 
 with X509.Keys;
 with X509.Oids;
+with X509.Validity;
 
 pragma Elaborate_All (X509.Keys);
 
@@ -40,15 +41,21 @@ is
    function Get_Subject (Cert : Certificate_Type) return String;
    --  Return certificate subject.
 
+   function Get_Validity
+     (Cert : Certificate_Type)
+      return Validity.Validity_Type;
+   --  Return certificate validity period.
+
 private
 
    type Certificate_Type is record
-      Signature     : Ada.Strings.Unbounded.Unbounded_String;
-      Signature_Alg : Oids.Oid_Type            := Oids.Undefined;
-      Pubkey        : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
-      Pubkey_Alg    : Oids.Oid_Type            := Oids.Undefined;
-      Issuer        : Ada.Strings.Unbounded.Unbounded_String;
-      Subject       : Ada.Strings.Unbounded.Unbounded_String;
+      Issuer          : Ada.Strings.Unbounded.Unbounded_String;
+      Subject         : Ada.Strings.Unbounded.Unbounded_String;
+      Signature       : Ada.Strings.Unbounded.Unbounded_String;
+      Signature_Alg   : Oids.Oid_Type            := Oids.Undefined;
+      Pubkey          : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
+      Pubkey_Alg      : Oids.Oid_Type            := Oids.Undefined;
+      Validity_Period : Validity.Validity_Type   := Validity.Null_Validity;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);
