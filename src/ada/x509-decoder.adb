@@ -12,7 +12,7 @@ is
      (Type_Descriptor  : TD_Handle;
       Type_Handle_Addr : System.Address;
       Buffer           : System.Address;
-      Buffer_Size      : Integer;
+      Buffer_Size      : Positive;
       Error_Prefix     : String)
    is
       use type Interfaces.C.int;

@@ -63,6 +63,11 @@ is
       Data   : Cert_Access;
       Buffer : Byte_Array := Utils.Read_File (Filename);
    begin
+      if Buffer'Length = 0 then
+         raise Load_Error with "Unable to decode empty file '"
+           & Filename & "'";
+      end if;
+
       Decoder.Decode
         (Type_Descriptor  => Certificate_h.asn_DEF_Certificate'Access,
          Type_Handle_Addr => Data'Address,

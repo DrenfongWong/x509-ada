@@ -7,7 +7,7 @@ is
      (Type_Descriptor  : TD_Handle;
       Type_Handle_Addr : System.Address;
       Buffer           : System.Address;
-      Buffer_Size      : Integer;
+      Buffer_Size      : Positive;
       Error_Prefix     : String);
    --  Decode ASN.1 type identified by type descriptor and buffer address. The
    --  type will be decoded to the address given by Type_Handle_Addr (which
