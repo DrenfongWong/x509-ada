@@ -19,7 +19,8 @@ is
       commonName,
       countryName,
       organizationalUnitName,
-      organizationName);
+      organizationName,
+      basicConstraints);
    --  Object identifiers.
 
    function To_Ada

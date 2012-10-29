@@ -97,4 +97,6 @@ begin
                    New_Item => organizationalUnitName);
    Oid_Map.Insert (Key      => (2, 5, 4, 10),
                    New_Item => organizationName);
+   Oid_Map.Insert (Key      => (2, 5, 29, 19),
+                   New_Item => basicConstraints);
 end X509.Oids;
