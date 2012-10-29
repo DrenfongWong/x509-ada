@@ -80,6 +80,14 @@ is
                asn_DEF_X520CommonName.free_struct
                  (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
             end return;
+         when X520CommonName_PR_teletexString =>
+            return S : constant String := "CN=" & Utils.To_String
+              (Address => Data.choice.teletexString.buf.all'Address,
+               Size    => Data.choice.teletexString.size)
+            do
+               asn_DEF_X520CommonName.free_struct
+                 (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
+            end return;
          when others =>
             asn_DEF_X520CommonName.free_struct
               (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
