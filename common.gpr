@@ -1,5 +1,3 @@
-with "src/ada/thin/binding";
-
 project Common is
 
    for Source_Dirs use ();

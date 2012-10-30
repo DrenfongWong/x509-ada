@@ -1,4 +1,6 @@
 PREFIX   ?= $(HOME)/libraries
+SRCDIR    = src
+THINDIR   = thin
 TESTDIR   = tests
 OBJDIR    = obj
 LIBDIR    = lib
@@ -20,15 +22,16 @@ tests: build_tests
 install: install_lib
 
 install_lib: build_lib
-	install -d $(PREFIX)/lib/gnat
-	install -d $(PREFIX)/lib/x509ada
-	install -d $(PREFIX)/include/x509ada
-	install -m 644 src/ada/*.ad* $(PREFIX)/include/x509ada
-	install -m 644 src/ada/thin/* $(PREFIX)/include/x509ada
+	mkdir -p $(PREFIX)/lib/gnat
+	mkdir -p $(PREFIX)/lib/x509ada/thin
+	mkdir -p $(PREFIX)/include/x509ada/thin
+	install -m 644 $(SRCDIR)/*.ad* $(PREFIX)/include/x509ada
+	install -m 644 $(THINDIR)/ada/* $(PREFIX)/include/x509ada/thin
 	install -m 444 $(LIBDIR)/*.ali $(PREFIX)/lib/x509ada
-	install -m 444 $(OBJDIR)/thin/*.ali $(PREFIX)/lib/x509ada
+	install -m 444 $(OBJDIR)/thin/*.ali $(PREFIX)/lib/x509ada/thin
 	install -m 644 $(GPR_FILES) $(PREFIX)/lib/gnat
 	install -m 444 $(LIBDIR)/libx509ada.a $(PREFIX)/lib
+	install -m 444 $(LIBDIR)/libx509ada-thin.a $(PREFIX)/lib
 
 clean:
 	@rm -rf $(OBJDIR)

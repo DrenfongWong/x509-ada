@@ -1,4 +1,6 @@
-project X509ada is
+with "x509ada_thin";
+
+library project X509ada is
    for Source_Dirs use ("../../include/x509ada");
    for Library_Name use "x509ada";
    for Library_Dir use "../../lib";
