@@ -46,7 +46,12 @@ is
          Address         => Data.all'Address,
          Error_Prefix    => "BasicConstraints validation failed");
 
-      return Data.cA /= null and then Data.cA.all /= 0;
+      return Status : constant Boolean := Data.cA /= null
+        and then Data.cA.all /= 0
+      do
+         asn_DEF_BasicConstraints.free_struct
+           (asn_DEF_BasicConstraints'Address, Data.all'Address, 0);
+      end return;
    end Decode_Basic_Constraints;
 
    -------------------------------------------------------------------------
