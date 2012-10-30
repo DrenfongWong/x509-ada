@@ -19,6 +19,12 @@ is
    --  Return hexadecimal representation of buffer with given size starting at
    --  specified address.
 
+   function To_Bytes
+     (Address : System.Address;
+      Size    : Interfaces.C.int)
+      return Byte_Array;
+   --  Convert buffer given by address and size to byte array.
+
    function Read_File (Filename : String) return Byte_Array;
    --  Read file contents into byte array.
 

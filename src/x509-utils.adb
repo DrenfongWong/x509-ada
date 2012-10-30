@@ -12,12 +12,6 @@ is
    function To_Hex_String (Input : Byte_Array) return String;
    --  Return hexadecimal string represenation of byte array.
 
-   procedure C_Memcpy
-     (Dst : System.Address;
-      Src : System.Address;
-      Len : C.size_t);
-   pragma Import (C, C_Memcpy, "memcpy");
-
    -------------------------------------------------------------------------
 
    function Read_File (Filename : String) return Byte_Array
@@ -56,6 +50,27 @@ is
             raise;
       end;
    end Read_File;
+
+   -------------------------------------------------------------------------
+
+   function To_Bytes
+     (Address : System.Address;
+      Size    : Interfaces.C.int)
+      return Byte_Array
+   is
+      procedure C_Memcpy
+        (Dst : System.Address;
+         Src : System.Address;
+         Len : C.size_t);
+      pragma Import (C, C_Memcpy, "memcpy");
+
+      Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
+   begin
+      C_Memcpy (Dst => Buffer'Address,
+                Src => Address,
+                Len => C.size_t (Size));
+      return Buffer;
+   end To_Bytes;
 
    -------------------------------------------------------------------------
 
@@ -101,12 +116,11 @@ is
       Size    : Interfaces.C.int)
       return String
    is
-      Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
    begin
-      C_Memcpy (Dst => Buffer'Address,
-                Src => Address,
-                Len => C.size_t (Size));
-      return To_Hex_String (Input => Buffer);
+      return To_Hex_String
+        (Input => To_Bytes
+           (Address => Address,
+            Size    => Size));
    end To_Hex_String;
 
    -------------------------------------------------------------------------
@@ -116,12 +130,11 @@ is
       Size    : Interfaces.C.int)
       return String
    is
-      Buffer : Byte_Array (1 .. Integer (Size)) := (others => 0);
+      Buffer : constant Byte_Array
+        := To_Bytes (Address => Address,
+                     Size    => Size);
       Result : String (Buffer'Range);
    begin
-      C_Memcpy (Dst => Buffer'Address,
-                Src => Address,
-                Len => C.size_t (Size));
       for I in Result'Range loop
          Result (I) := Character'Val (Buffer (I));
       end loop;
