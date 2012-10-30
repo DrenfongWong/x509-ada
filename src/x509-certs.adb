@@ -84,15 +84,14 @@ is
    -------------------------------------------------------------------------
 
    procedure Load
-     (Filename :     String;
-      Cert     : out Certificate_Type)
+     (Buffer :     Byte_Array;
+      Cert   : out Certificate_Type)
    is
-      Data   : Cert_Access;
-      Buffer : Byte_Array := Utils.Read_File (Filename);
+      Data : Cert_Access;
    begin
       if Buffer'Length = 0 then
-         raise Load_Error with "Unable to decode empty file '"
-           & Filename & "'";
+         raise Load_Error with "Unable to decode certificate from empty"
+           & " buffer";
       end if;
 
       Decoder.Decode
@@ -100,11 +99,11 @@ is
          Type_Handle_Addr => Data'Address,
          Buffer           => Buffer'Address,
          Buffer_Size      => Buffer'Length,
-         Error_Prefix     => "Unable to load certificate '" & Filename & "'");
+         Error_Prefix     => "Unable to load certificate");
       Constraints.Check
         (Type_Descriptor => Certificate_h.asn_DEF_Certificate'Access,
          Address         => Data.all'Address,
-         Error_Prefix    => "Validation failed for '" & Filename & "'");
+         Error_Prefix    => "Certificate constraints check failed");
 
       Extract_Data :
       begin
@@ -154,6 +153,17 @@ is
 
       Certificate_h.asn_DEF_Certificate.free_struct
         (Certificate_h.asn_DEF_Certificate'Address, Data.all'Address, 0);
+   end Load;
+
+   -------------------------------------------------------------------------
+
+   procedure Load
+     (Filename :     String;
+      Cert     : out Certificate_Type)
+   is
+   begin
+      Load (Buffer => Utils.Read_File (Filename),
+            Cert   => Cert);
    end Load;
 
 end X509.Certs;
