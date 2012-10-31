@@ -9,9 +9,6 @@ is
 
    Hex_Chars : constant String := "0123456789abcdef";
 
-   function To_Hex_String (Input : Byte_Array) return String;
-   --  Return hexadecimal string represenation of byte array.
-
    -------------------------------------------------------------------------
 
    function Read_File (Filename : String) return Byte_Array

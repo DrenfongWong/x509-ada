@@ -19,6 +19,9 @@ is
    --  Return hexadecimal representation of buffer with given size starting at
    --  specified address.
 
+   function To_Hex_String (Input : Byte_Array) return String;
+   --  Return hex string represenation of byte array.
+
    function To_Bytes
      (Address : System.Address;
       Size    : Interfaces.C.int)
