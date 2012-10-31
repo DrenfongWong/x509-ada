@@ -52,10 +52,25 @@ is
       return Validity.Validity_Type;
    --  Return certificate validity period.
 
+   function Get_Tbs_Data (Cert : Certificate_Type) return Byte_Array;
+   --  Return DER encoded TBSCertificate data.
+
    function Is_Ca (Cert : Certificate_Type) return Boolean;
    --  Returns True if the given certificate is a Certificate Authority.
 
+   Encoding_Error : exception;
+
 private
+
+   type Der_Data_Type is record
+      Size : Natural := 0;
+      Data : Byte_Array (1 .. 8192);
+   end record;
+   --  DER encoded certificate data.
+
+   Null_Der_Data : constant Der_Data_Type
+     := (Size => 0,
+         Data => (others => 0));
 
    type Certificate_Type is record
       Issuer          : Ada.Strings.Unbounded.Unbounded_String;
@@ -66,6 +81,7 @@ private
       Pubkey_Alg      : Oids.Oid_Type            := Oids.Undefined;
       Validity_Period : Validity.Validity_Type   := Validity.Null_Validity;
       Is_Ca           : Boolean                  := False;
+      Der_Encoding    : Der_Data_Type            := Null_Der_Data;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);

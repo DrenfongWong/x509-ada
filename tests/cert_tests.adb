@@ -6,6 +6,7 @@ with X509.Keys;
 with X509.Constraints;
 with X509.Oids;
 with X509.Validity;
+with X509.Utils;
 
 with Test_Utils;
 
@@ -93,6 +94,8 @@ is
               Message   => "Unexpected subject");
       Assert (Condition => Certs.Get_Validity (Cert) = Validity.Null_Validity,
               Message   => "Unexpected validity");
+      Assert (Condition => Certs.Get_Tbs_Data (Cert) = Null_Byte_Array,
+              Message   => "Unexpected DER data");
 
       Certs.Load (Filename => "data/cert.der",
                   Cert     => Cert);
@@ -156,6 +159,14 @@ is
                  Message   => "Validity end mismatch");
          Assert (Condition => Validity.Is_Valid (V),
                  Message   => "Cert not valid");
+      end;
+
+      declare
+         Tbs_Der : constant Byte_Array := Utils.Read_File
+           (Filename => "data/tbscert.der");
+      begin
+         Assert (Condition => Certs.Get_Tbs_Data (Cert) = Tbs_Der,
+                 Message   => "tbsCertificate DER mismatch");
       end;
    end Load_Cert;
 

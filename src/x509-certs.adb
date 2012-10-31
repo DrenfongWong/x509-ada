@@ -1,4 +1,8 @@
+with stdio_h;
+with asn_codecs_h;
+with der_encoder_h;
 with Certificate_h;
+with TBSCertificate_h;
 
 with X509.Utils;
 with X509.Decoder;
@@ -62,6 +66,48 @@ is
    begin
       return To_String (Cert.Subject);
    end Get_Subject;
+
+   -------------------------------------------------------------------------
+
+   function Get_Tbs_Data (Cert : Certificate_Type) return Byte_Array
+   is
+      use Certificate_h;
+      use type stdio_h.ssize_t;
+
+      Rval   : asn_codecs_h.asn_enc_rval_t;
+      C      : Cert_Access;
+      Buffer : Byte_Array (1 .. Cert.Der_Encoding.Data'Length)
+        := (others => 0);
+   begin
+      if Cert.Der_Encoding = Null_Der_Data then
+         return Null_Byte_Array;
+      end if;
+
+      --  To get the DER encoded data of just the TBSCertificate PDU we need
+      --  to decode the complete certificate again and then encode just the TBS
+      --  part. Constraints check omitted because we already know that the
+      --  certificate is valid.
+
+      Decoder.Decode
+        (Type_Descriptor  => Certificate_h.asn_DEF_Certificate'Access,
+         Type_Handle_Addr => C'Address,
+         Buffer           => Cert.Der_Encoding.Data'Address,
+         Buffer_Size      => Cert.Der_Encoding.Size,
+         Error_Prefix     => "Tbs: Unable to decode certificate");
+      Rval := der_encoder_h.der_encode_to_buffer
+        (type_descriptor => TBSCertificate_h.asn_DEF_TBSCertificate'Access,
+         struct_ptr      => C.tbsCertificate'Address,
+         buffer          => Buffer'Address,
+         buffer_size     => Buffer'Length);
+      asn_DEF_Certificate.free_struct
+        (asn_DEF_Certificate'Address, C.all'Address, 0);
+
+      if Rval.encoded = -1 then
+         raise Encoding_Error with "Unable to DER encode TBSCertificate";
+      end if;
+
+      return Buffer (Buffer'First .. Positive (Rval.encoded));
+   end Get_Tbs_Data;
 
    -------------------------------------------------------------------------
 
@@ -143,6 +189,12 @@ is
               subjectPublicKey.buf.all'Address,
             Size    => Integer (Data.tbsCertificate.subjectPublicKeyInfo.
                 subjectPublicKey.size));
+
+         --  Store 'raw' DER encoded data.
+
+         Cert.Der_Encoding.Data
+           (Cert.Der_Encoding.Data'First .. Buffer'Length) := Buffer;
+         Cert.Der_Encoding.Size := Buffer'Length;
 
       exception
          when others =>
