@@ -45,10 +45,15 @@ is
 
    -------------------------------------------------------------------------
 
-   function Get_Signature (Cert : Certificate_Type) return String
+   function Get_Signature (Cert : Certificate_Type) return Byte_Array
    is
    begin
-      return To_String (Cert.Signature);
+      if Cert.Signature = Null_Sequence then
+         return Null_Byte_Array;
+      end if;
+
+      return Cert.Signature.Data
+        (Cert.Signature.Data'First .. Cert.Signature.Size);
    end Get_Signature;
 
    -------------------------------------------------------------------------
@@ -79,7 +84,7 @@ is
       Buffer : Byte_Array (1 .. Cert.Der_Encoding.Data'Length)
         := (others => 0);
    begin
-      if Cert.Der_Encoding = Null_Der_Data then
+      if Cert.Der_Encoding = Null_Sequence then
          return Null_Byte_Array;
       end if;
 
@@ -156,9 +161,11 @@ is
 
          --  Signature
 
-         Cert.Signature := To_Unbounded_String
-           (Utils.To_Hex_String (Address => Data.signature.buf.all'Address,
-                                 Size    => Data.signature.size));
+         Cert.Signature.Size := Positive (Data.signature.size);
+         Cert.Signature.Data (Cert.Signature.Data'First .. Cert.Signature.Size)
+           := Utils.To_Bytes
+             (Address => Data.signature.buf.all'Address,
+              Size    => Data.signature.size);
          Cert.Signature_Alg := Oids.To_Ada
            (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
 

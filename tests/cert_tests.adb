@@ -82,7 +82,7 @@ is
       Cert   : Certs.Certificate_Type;
       Pubkey : Keys.RSA_Public_Key_Type;
    begin
-      Assert (Condition => Certs.Get_Signature (Cert) = "",
+      Assert (Condition => Certs.Get_Signature (Cert) = Null_Byte_Array,
               Message   => "Unexpected signature");
       Assert (Condition => Certs.Get_Signature_Alg (Cert) = Oids.Undefined,
               Message   => "Unexpected sigalg");
@@ -110,7 +110,8 @@ is
 
       Assert (Condition => Certs.Get_Pubkey_Alg (Cert) = Oids.rsaEncryption,
               Message   => "Pubkey algorithm mismatch");
-      Assert (Condition => Certs.Get_Signature (Cert) = Ref_Sig,
+      Assert (Condition => Utils.To_Hex_String
+              (Certs.Get_Signature (Cert)) = Ref_Sig,
               Message   => "Signature mismatch");
       Assert (Condition => Certs.Get_Signature_Alg
               (Cert) = Oids.sha256WithRSAEncryption,

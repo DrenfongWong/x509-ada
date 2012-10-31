@@ -35,7 +35,7 @@ is
    function Get_Pubkey_Alg (Cert : Certificate_Type) return Oids.Oid_Type;
    --  Return public key algorithm identifier.
 
-   function Get_Signature (Cert : Certificate_Type) return String;
+   function Get_Signature (Cert : Certificate_Type) return Byte_Array;
    --  Return certificate signature.
 
    function Get_Signature_Alg (Cert : Certificate_Type) return Oids.Oid_Type;
@@ -62,26 +62,26 @@ is
 
 private
 
-   type Der_Data_Type is record
+   type Byte_Sequence is record
       Size : Natural := 0;
       Data : Byte_Array (1 .. 8192);
    end record;
-   --  DER encoded certificate data.
+   --  Byte sequence.
 
-   Null_Der_Data : constant Der_Data_Type
+   Null_Sequence : constant Byte_Sequence
      := (Size => 0,
          Data => (others => 0));
 
    type Certificate_Type is record
       Issuer          : Ada.Strings.Unbounded.Unbounded_String;
       Subject         : Ada.Strings.Unbounded.Unbounded_String;
-      Signature       : Ada.Strings.Unbounded.Unbounded_String;
+      Signature       : Byte_Sequence            := Null_Sequence;
       Signature_Alg   : Oids.Oid_Type            := Oids.Undefined;
       Pubkey          : Keys.RSA_Public_Key_Type := Keys.Null_Public_Key;
       Pubkey_Alg      : Oids.Oid_Type            := Oids.Undefined;
       Validity_Period : Validity.Validity_Type   := Validity.Null_Validity;
       Is_Ca           : Boolean                  := False;
-      Der_Encoding    : Der_Data_Type            := Null_Der_Data;
+      Der_Encoding    : Byte_Sequence            := Null_Sequence;
    end record;
 
    Null_Certificate : constant Certificate_Type := (others => <>);
