@@ -26,15 +26,16 @@ is
    -------------------------------------------------------------------------
 
    function To_Ada
-     (Asn_Oid : access OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t)
+     (Asn_Oid : OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t)
       return Oid_Type
    is
       use type C.int;
       use type C.unsigned;
 
-      Slots : C.int
+      Local_Oid : aliased OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t := Asn_Oid;
+      Slots     : C.int
         := OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_get_arcs
-          (u_oid           => Asn_Oid,
+          (u_oid           => Local_Oid'Access,
            u_arcs          => System.Null_Address,
            u_arc_type_size => C.int'Size / 8,
            u_arc_slots     => 0);
@@ -45,7 +46,7 @@ is
       end if;
 
       Slots := OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_get_arcs
-        (u_oid           => Asn_Oid,
+        (u_oid           => Local_Oid'Access,
          u_arcs          => Ints'Address,
          u_arc_type_size => C.int'Size / 8,
          u_arc_slots     => C.unsigned (Slots));

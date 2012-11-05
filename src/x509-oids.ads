@@ -30,7 +30,7 @@ is
    --  Object identifiers.
 
    function To_Ada
-     (Asn_Oid : access OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t)
+     (Asn_Oid : OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t)
       return Oid_Type;
    --  Convert given ASN.1 OID structure to Ada OID type.
 

@@ -79,7 +79,7 @@ is
             pragma Import (Ada, E);
 
             Oid : constant Oids.Oid_Type := Oids.To_Ada
-              (Asn_Oid => E.extnID'Access);
+              (Asn_Oid => E.extnID);
          begin
             if Oid = Oids.basicConstraints then
                return Decode_Basic_Constraints

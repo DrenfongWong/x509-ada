@@ -167,7 +167,7 @@ is
              (Address => Data.signature.buf.all'Address,
               Size    => Data.signature.size);
          Cert.Signature_Alg := Oids.To_Ada
-           (Asn_Oid => Data.tbsCertificate.signature.algorithm'Access);
+           (Asn_Oid => Data.tbsCertificate.signature.algorithm);
 
          --  Issuer & Subject
 
@@ -190,7 +190,7 @@ is
 
          Cert.Pubkey_Alg := Oids.To_Ada
            (Asn_Oid => Data.tbsCertificate.subjectPublicKeyInfo.
-              algorithm.algorithm'Access);
+              algorithm.algorithm);
          Cert.Pubkey.Load
            (Address => Data.tbsCertificate.subjectPublicKeyInfo.
               subjectPublicKey.buf.all'Address,

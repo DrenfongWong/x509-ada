@@ -24,7 +24,8 @@ is
       type Uint8_Array is array (Interfaces.C.int range <>)
         of aliased stdint_h.uint8_t;
 
-      A       : aliased OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t;
+      A       : OBJECT_IDENTIFIER_h.OBJECT_IDENTIFIER_t
+        := (others => <>);
       Unknown : Uint8_Array := (1 => 43);
       Known   : Uint8_Array := (16#2a#, 16#86#, 16#48#, 16#86#, 16#f7#, 16#0d#,
                                 16#01#, 16#01#, 16#0b#);
@@ -32,7 +33,7 @@ is
       Oid : Oids.Oid_Type;
    begin
       begin
-         Oid := Oids.To_Ada (A'Access);
+         Oid := Oids.To_Ada (A);
 
       exception
          when Conversion_Error => null;
@@ -42,7 +43,7 @@ is
       A.size := Unknown'Length;
 
       begin
-         Oid := Oids.To_Ada (A'Access);
+         Oid := Oids.To_Ada (A);
 
       exception
          when E : Conversion_Error =>
@@ -54,7 +55,7 @@ is
       A.buf  := Known (Known'First)'Unchecked_Access;
       A.size := Known'Length;
 
-      Oid := Oids.To_Ada (Asn_Oid => A'Access);
+      Oid := Oids.To_Ada (Asn_Oid => A);
 
       Assert (Condition => Oid = Oids.sha256WithRSAEncryption,
               Message   => "Invalid OID");
