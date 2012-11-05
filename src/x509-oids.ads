@@ -2,6 +2,7 @@ with OBJECT_IDENTIFIER_h;
 
 package X509.Oids
 is
+
    type Oid_Type is
      (Undefined,
 

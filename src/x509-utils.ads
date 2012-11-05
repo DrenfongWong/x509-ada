@@ -20,7 +20,7 @@ is
    --  specified address.
 
    function To_Hex_String (Input : Byte_Array) return String;
-   --  Return hex string represenation of byte array.
+   --  Return hex string representation of byte array.
 
    function To_Bytes
      (Address : System.Address;

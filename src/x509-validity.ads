@@ -4,6 +4,7 @@ with Validity_h;
 
 package X509.Validity
 is
+
    type Validity_Type is private;
    --  Certificate validity period.
 

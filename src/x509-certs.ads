@@ -24,7 +24,7 @@ is
    procedure Load
      (Buffer :     Byte_Array;
       Cert   : out Certificate_Type);
-   --  Load X.509 certificate from byte arrray buffer. Raises an exception if
+   --  Load X.509 certificate from byte array buffer. Raises an exception if
    --  the parsing of the certificate failed.
 
    function Get_Public_Key
