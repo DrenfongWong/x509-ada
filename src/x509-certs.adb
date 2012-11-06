@@ -179,7 +179,7 @@ is
          --  Validity
 
          Cert.Validity_Period := Validity.To_Ada
-           (Asn_Validity => Data.tbsCertificate.validity'Access);
+           (Asn_Validity => Data.tbsCertificate.validity);
 
          --  Extensions
 

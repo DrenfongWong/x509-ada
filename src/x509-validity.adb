@@ -77,7 +77,7 @@ is
 
    -------------------------------------------------------------------------
 
-   function To_Ada (Asn_Validity : Asn_Validity_Handle) return Validity_Type
+   function To_Ada (Asn_Validity : Validity_h.Validity_t) return Validity_Type
    is
       V : Validity_Type;
    begin

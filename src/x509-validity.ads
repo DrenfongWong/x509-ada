@@ -20,9 +20,7 @@ is
    function Is_Valid (V : Validity_Type) return Boolean;
    --  Returns True if the current time lies in the validity period.
 
-   type Asn_Validity_Handle is not null access all Validity_h.Validity_t;
-
-   function To_Ada (Asn_Validity : Asn_Validity_Handle) return Validity_Type;
+   function To_Ada (Asn_Validity : Validity_h.Validity_t) return Validity_Type;
    --  Convert given ASN.1 validity structure to Ada Validity_Type.
 
 private
