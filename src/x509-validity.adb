@@ -79,11 +79,12 @@ is
 
    function To_Ada (Asn_Validity : Validity_h.Validity_t) return Validity_Type
    is
-      V : Validity_Type;
    begin
-      V.Not_Before := To_Ada (Asn_Time => Asn_Validity.notBefore);
-      V.Not_After  := To_Ada (Asn_Time => Asn_Validity.notAfter);
-      return V;
+      return V : Validity_Type
+      do
+         V.Not_Before := To_Ada (Asn_Time => Asn_Validity.notBefore);
+         V.Not_After  := To_Ada (Asn_Time => Asn_Validity.notAfter);
+      end return;
    end To_Ada;
 
 end X509.Validity;
