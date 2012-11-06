@@ -253,7 +253,7 @@ is
 
    -------------------------------------------------------------------------
 
-   function To_Ada (Asn_Name : Asn_Name_Handle) return String
+   function To_Ada (Asn_Name : Name_h.Name_t) return String
    is
       use type C.int;
 

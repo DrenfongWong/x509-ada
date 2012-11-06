@@ -172,9 +172,9 @@ is
          --  Issuer & Subject
 
          Cert.Issuer  := To_Unbounded_String
-           (Names.To_Ada (Asn_Name => Data.tbsCertificate.issuer'Access));
+           (Names.To_Ada (Asn_Name => Data.tbsCertificate.issuer));
          Cert.Subject := To_Unbounded_String
-           (Names.To_Ada (Asn_Name => Data.tbsCertificate.subject'Access));
+           (Names.To_Ada (Asn_Name => Data.tbsCertificate.subject));
 
          --  Validity
 
