@@ -62,7 +62,7 @@ is
 
       Now : constant Time := Clock;
    begin
-      return V.Not_Before < Now and then Now < V.Not_After;
+      return V.Not_Before <= Now and then Now <= V.Not_After;
    end Is_Valid;
 
    -------------------------------------------------------------------------
