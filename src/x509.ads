@@ -20,6 +20,8 @@
 --  executable file might be covered by the GNU Public License.
 --
 
+pragma License (Modified_GPL);
+
 with constr_TYPE_h;
 
 package X509
