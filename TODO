@@ -1,0 +1,6 @@
+TODO
+====
+- emptyString in pkcs1 (maybe RSASSA files must not be removed)
+- Unify keys Load procedure
+- Add support for all string type (teletex etc)
+- Improve Names decoding
