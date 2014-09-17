@@ -180,8 +180,8 @@ is
                  Message   => "Validity start mismatch");
          Assert (Condition => Validity.Get_End (V) = T2,
                  Message   => "Validity end mismatch");
-         Assert (Condition => Validity.Is_Valid (V),
-                 Message   => "Cert not valid");
+         Assert (Condition => not Validity.Is_Valid (V),
+                 Message   => "Cert still valid");
       end;
 
       declare
