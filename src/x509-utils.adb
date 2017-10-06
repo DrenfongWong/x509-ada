@@ -96,7 +96,6 @@ is
    function To_Hex_String (Input : Byte_Array) return String
    is
       use type Interfaces.Unsigned_8;
-      use type Interfaces.C.size_t;
    begin
       if Input'Length = 0 then
          return "0";

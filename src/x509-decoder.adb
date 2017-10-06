@@ -37,7 +37,6 @@ is
       Buffer_Size      : Positive;
       Error_Prefix     : String)
    is
-      use type Interfaces.C.int;
       use type asn_codecs_h.asn_dec_rval_code_e;
 
       Rval : asn_codecs_h.asn_dec_rval_t;
