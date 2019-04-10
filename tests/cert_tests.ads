@@ -45,4 +45,7 @@ is
    procedure Load_Random_ASN1;
    --  Test loading of random ASN1 structures.
 
+   procedure Load_Cert_Without_Critical;
+   --  Test loading of certificate with extensions that has no critical field.
+
 end Cert_Tests;

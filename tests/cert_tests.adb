@@ -77,6 +77,9 @@ is
       T.Add_Test_Routine
         (Routine => Load_Random_ASN1'Access,
          Name    => "Load random ASN.1 structures");
+      T.Add_Test_Routine
+        (Routine => Load_Cert_Without_Critical'Access,
+         Name    => "Load certificate without critical field");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -192,6 +195,22 @@ is
                  Message   => "tbsCertificate DER mismatch");
       end;
    end Load_Cert;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Cert_Without_Critical
+   is
+      Cert : Certs.Certificate_Type;
+   begin
+
+      --  Loading a cert with extensions that do not contain the optional
+      --  "critical" field must not raise an exception.
+
+      Certs.Load (Filename => "data/cert_without_critical.der",
+                  Cert     => Cert);
+      Assert (Condition => not Certs.Is_Ca (Cert),
+              Message   => "CA status mismatch");
+   end Load_Cert_Without_Critical;
 
    -------------------------------------------------------------------------
 
