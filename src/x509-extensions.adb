@@ -108,7 +108,7 @@ is
                  (Buffer => E.extnValue.buf.all'Address,
                   Size   => Positive (E.extnValue.size));
             end if;
-            if E.critical.all /= 0 then
+            if E.critical /= null and then E.critical.all /= 0 then
                raise Conversion_Error with "Unsupported critical extension "
                  & Oid'Img;
             end if;
