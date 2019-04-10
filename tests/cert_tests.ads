@@ -48,4 +48,7 @@ is
    procedure Load_Cert_Without_Critical;
    --  Test loading of certificate with extensions that has no critical field.
 
+   procedure Load_Cert_UTF8;
+   --  Test loading of certificate with UTF-8 string.
+
 end Cert_Tests;

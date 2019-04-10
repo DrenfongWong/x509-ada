@@ -80,6 +80,9 @@ is
       T.Add_Test_Routine
         (Routine => Load_Cert_Without_Critical'Access,
          Name    => "Load certificate without critical field");
+      T.Add_Test_Routine
+        (Routine => Load_Cert_UTF8'Access,
+         Name    => "Load certificate with UTF-8 string");
    end Initialize;
 
    -------------------------------------------------------------------------
@@ -195,6 +198,21 @@ is
                  Message   => "tbsCertificate DER mismatch");
       end;
    end Load_Cert;
+
+   -------------------------------------------------------------------------
+
+   procedure Load_Cert_UTF8
+   is
+      Ref_Subject : constant String
+        := "C=CH, O=strongSwan Project, OU=Research, CN=carol@strongswan.org";
+
+      Cert : Certs.Certificate_Type;
+   begin
+      Certs.Load (Filename => "data/cert_utf8.der",
+                  Cert     => Cert);
+      Assert (Condition => Certs.Get_Subject (Cert => Cert) = Ref_Subject,
+              Message   => "Subject name mismatch");
+   end Load_Cert_UTF8;
 
    -------------------------------------------------------------------------
 

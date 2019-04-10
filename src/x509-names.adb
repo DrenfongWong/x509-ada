@@ -117,6 +117,14 @@ is
                asn_DEF_X520CommonName.free_struct
                  (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
             end return;
+         when X520CommonName_PR_utf8String =>
+            return S : constant String := "CN=" & Utils.To_String
+              (Address => Data.choice.utf8String.buf.all'Address,
+               Size    => Data.choice.utf8String.size)
+            do
+               asn_DEF_X520CommonName.free_struct
+                 (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
+            end return;
          when others =>
             asn_DEF_X520CommonName.free_struct
               (asn_DEF_X520CommonName'Address, Data.all'Address, 0);
@@ -191,6 +199,14 @@ is
                asn_DEF_X520OrganizationName.free_struct
                  (asn_DEF_X520OrganizationName'Address, Data.all'Address, 0);
             end return;
+         when X520OrganizationName_PR_utf8String =>
+            return S : constant String := "O=" & Utils.To_String
+              (Address => Data.choice.utf8String.buf.all'Address,
+               Size    => Data.choice.utf8String.size)
+            do
+               asn_DEF_X520OrganizationName.free_struct
+                 (asn_DEF_X520OrganizationName'Address, Data.all'Address, 0);
+            end return;
          when others =>
             asn_DEF_X520OrganizationName.free_struct
               (asn_DEF_X520OrganizationName'Address, Data.all'Address, 0);
@@ -228,6 +244,15 @@ is
             return S : constant String := "OU=" & Utils.To_String
               (Address => Data.choice.printableString.buf.all'Address,
                Size    => Data.choice.printableString.size)
+            do
+               asn_DEF_X520OrganizationalUnitName.free_struct
+                 (asn_DEF_X520OrganizationalUnitName'Address,
+                  Data.all'Address, 0);
+            end return;
+         when X520OrganizationalUnitName_PR_utf8String =>
+            return S : constant String := "OU=" & Utils.To_String
+              (Address => Data.choice.utf8String.buf.all'Address,
+               Size    => Data.choice.utf8String.size)
             do
                asn_DEF_X520OrganizationalUnitName.free_struct
                  (asn_DEF_X520OrganizationalUnitName'Address,
